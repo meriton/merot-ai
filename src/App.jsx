@@ -1,8 +1,41 @@
+import { useState, useEffect } from 'react'
 import './App.css'
 
 function App() {
+  const [showBanner, setShowBanner] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowBanner(true)
+      } else {
+        setShowBanner(false)
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const scrollToContact = () => {
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+  }
+
   return (
     <div className="app">
+      {/* Scroll Banner */}
+      <div className={`scroll-banner ${showBanner ? 'show' : ''}`}>
+        <div className="scroll-banner-container">
+          <div className="scroll-banner-text">
+            <p className="scroll-banner-title">Unlock savings and accuracy for your data labeling!</p>
+            <p className="scroll-banner-subtitle">Speak with a team member today to start with MEROT.ai</p>
+          </div>
+          <button className="scroll-banner-button" onClick={scrollToContact}>
+            Contact Us
+          </button>
+        </div>
+      </div>
+
       {/* Navigation */}
       <nav className="nav">
         <div className="nav-container">
