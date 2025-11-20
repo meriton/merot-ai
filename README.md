@@ -21,6 +21,11 @@ Official website for merot.ai - AI Data Annotation platform.
 # Install dependencies
 npm install
 
+# Set up contact form (see CONTACT_FORM_SETUP.md)
+# 1. Sign up at https://formspree.io
+# 2. Create a form and get your endpoint URL
+# 3. Update .env with your Formspree URL
+
 # Start development server
 npm run dev
 
@@ -33,6 +38,10 @@ npm run preview
 # Lint code
 npm run lint
 ```
+
+## Contact Form Setup
+
+The contact form requires a Formspree account (free). See [CONTACT_FORM_SETUP.md](./CONTACT_FORM_SETUP.md) for detailed setup instructions.
 
 ## AWS Deployment
 

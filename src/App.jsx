@@ -75,62 +75,25 @@ function App() {
     })
 
     try {
-      // Using SendGrid API
-      const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
+      // Using Formspree - free service for contact forms
+      const formspreeUrl = import.meta.env.VITE_FORMSPREE_URL || 'https://formspree.io/f/YOUR_FORM_ID';
+
+      const response = await fetch(formspreeUrl, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_SENDGRID_API_KEY}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          personalizations: [
-            {
-              to: [
-                {
-                  email: 'genci@phase3interiors.com',
-                  name: 'Genci'
-                },
-                {
-                  email: 'meriton@merot.ai',
-                  name: 'Meriton'
-                }
-              ],
-              subject: 'New Contact Form Submission from Merot.ai'
-            }
-          ],
-          from: {
-            email: 'contact@merot.com',
-            name: 'Merot.ai Website'
-          },
-          reply_to: {
-            email: formData.email,
-            name: formData.name
-          },
-          content: [
-            {
-              type: 'text/html',
-              value: `
-                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                  <h2 style="color: #667eea;">New Contact Form Submission</h2>
-                  <div style="background: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
-                    <p><strong>Name:</strong> ${formData.name}</p>
-                    <p><strong>Email:</strong> ${formData.email}</p>
-                    <p><strong>Company:</strong> ${formData.company || 'Not provided'}</p>
-                  </div>
-                  <div style="margin: 20px 0;">
-                    <h3 style="color: #333;">Message:</h3>
-                    <p style="line-height: 1.6; color: #555;">${formData.message.replace(/\n/g, '<br>')}</p>
-                  </div>
-                  <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
-                  <p style="font-size: 12px; color: #888;">Sent from Merot.ai contact form</p>
-                </div>
-              `
-            }
-          ]
+          name: formData.name,
+          email: formData.email,
+          company: formData.company || 'Not provided',
+          message: formData.message,
+          _replyto: formData.email,
+          _subject: 'New Contact Form Submission from Merot.ai'
         })
       })
 
-      if (response.ok || response.status === 202) {
+      if (response.ok) {
         setFormStatus({
           submitting: false,
           success: true,
@@ -146,7 +109,7 @@ function App() {
         })
       } else {
         const errorData = await response.json()
-        console.error('SendGrid error:', errorData)
+        console.error('Formspree error:', errorData)
         throw new Error('Form submission failed')
       }
     } catch (error) {
