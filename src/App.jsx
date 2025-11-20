@@ -3,6 +3,18 @@ import './App.css'
 
 function App() {
   const [showBanner, setShowBanner] = useState(false)
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    company: '',
+    message: ''
+  })
+  const [formStatus, setFormStatus] = useState({
+    submitting: false,
+    success: false,
+    error: false,
+    message: ''
+  })
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,6 +31,133 @@ function App() {
 
   const scrollToContact = () => {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    // Basic validation
+    if (!formData.name || !formData.email || !formData.message) {
+      setFormStatus({
+        submitting: false,
+        success: false,
+        error: true,
+        message: 'Please fill in all required fields.'
+      })
+      return
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(formData.email)) {
+      setFormStatus({
+        submitting: false,
+        success: false,
+        error: true,
+        message: 'Please enter a valid email address.'
+      })
+      return
+    }
+
+    setFormStatus({
+      submitting: true,
+      success: false,
+      error: false,
+      message: ''
+    })
+
+    try {
+      // Using SendGrid API
+      const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${import.meta.env.VITE_SENDGRID_API_KEY}`
+        },
+        body: JSON.stringify({
+          personalizations: [
+            {
+              to: [
+                {
+                  email: 'genci@phase3interiors.com',
+                  name: 'Genci'
+                },
+                {
+                  email: 'meriton@merot.ai',
+                  name: 'Meriton'
+                }
+              ],
+              subject: 'New Contact Form Submission from Merot.ai'
+            }
+          ],
+          from: {
+            email: 'contact@merot.com',
+            name: 'Merot.ai Website'
+          },
+          reply_to: {
+            email: formData.email,
+            name: formData.name
+          },
+          content: [
+            {
+              type: 'text/html',
+              value: `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                  <h2 style="color: #667eea;">New Contact Form Submission</h2>
+                  <div style="background: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <p><strong>Name:</strong> ${formData.name}</p>
+                    <p><strong>Email:</strong> ${formData.email}</p>
+                    <p><strong>Company:</strong> ${formData.company || 'Not provided'}</p>
+                  </div>
+                  <div style="margin: 20px 0;">
+                    <h3 style="color: #333;">Message:</h3>
+                    <p style="line-height: 1.6; color: #555;">${formData.message.replace(/\n/g, '<br>')}</p>
+                  </div>
+                  <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
+                  <p style="font-size: 12px; color: #888;">Sent from Merot.ai contact form</p>
+                </div>
+              `
+            }
+          ]
+        })
+      })
+
+      if (response.ok || response.status === 202) {
+        setFormStatus({
+          submitting: false,
+          success: true,
+          error: false,
+          message: 'Thank you! We\'ll get back to you shortly.'
+        })
+        // Reset form
+        setFormData({
+          name: '',
+          email: '',
+          company: '',
+          message: ''
+        })
+      } else {
+        const errorData = await response.json()
+        console.error('SendGrid error:', errorData)
+        throw new Error('Form submission failed')
+      }
+    } catch (error) {
+      console.error('Submission error:', error)
+      setFormStatus({
+        submitting: false,
+        success: false,
+        error: true,
+        message: 'Something went wrong. Please try again or email us directly at contact@merot.ai'
+      })
+    }
   }
 
   return (
@@ -432,7 +571,77 @@ function App() {
           <p className="contact-text">
             Join leading companies using Merot.ai for their data annotation needs
           </p>
-          <button className="primary-button large">Contact Sales</button>
+
+          <form className="contact-form" onSubmit={handleSubmit}>
+            <div className="form-grid">
+              <div className="form-group">
+                <label htmlFor="name">Name *</label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  placeholder="Your name"
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="email">Email *</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  placeholder="your.email@company.com"
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="company">Company</label>
+                <input
+                  type="text"
+                  id="company"
+                  name="company"
+                  value={formData.company}
+                  onChange={handleInputChange}
+                  placeholder="Your company name"
+                />
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="message">Message *</label>
+              <textarea
+                id="message"
+                name="message"
+                value={formData.message}
+                onChange={handleInputChange}
+                placeholder="Tell us about your data annotation needs..."
+                rows="5"
+                required
+              ></textarea>
+            </div>
+
+            {formStatus.error && (
+              <div className="form-message error">{formStatus.message}</div>
+            )}
+
+            {formStatus.success && (
+              <div className="form-message success">{formStatus.message}</div>
+            )}
+
+            <button
+              type="submit"
+              className="primary-button large"
+              disabled={formStatus.submitting}
+            >
+              {formStatus.submitting ? 'Sending...' : 'Send Message'}
+            </button>
+          </form>
         </div>
       </section>
 
