@@ -2,6 +2,11 @@
 .app {
   min-height: 100vh;
   width: 100%;
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 /* Navigation */
@@ -13,10 +18,12 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   z-index: 1000;
   padding: 1rem 0;
+  width: 100%;
 }
 
 .nav-container {
   max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
   padding: 0 2rem;
   display: flex;
@@ -61,8 +68,14 @@
 /* Container */
 .container {
   max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
   padding: 0 2rem;
+}
+
+section {
+  width: 100%;
+  overflow-x: hidden;
 }
 
 /* Hero Section */
@@ -88,6 +101,7 @@
 
 .hero-container {
   max-width: 1400px;
+  width: 100%;
   margin: 0 auto;
   padding: 0 2rem;
   display: grid;
@@ -270,6 +284,7 @@
 .about-header {
   text-align: center;
   margin-bottom: 4rem;
+  width: 100%;
 }
 
 .about-title {
@@ -284,6 +299,7 @@
   font-size: 1.2rem;
   color: #666;
   font-weight: 400;
+  max-width: 100%;
 }
 
 .about-grid {
@@ -291,6 +307,7 @@
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2.5rem;
   max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -503,6 +520,7 @@
 
 .pilot-card {
   max-width: 1100px;
+  width: 100%;
   margin: 0 auto;
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(20px);
@@ -890,6 +908,7 @@
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1.5rem;
   max-width: 900px;
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -1092,49 +1111,227 @@
 }
 
 @media (max-width: 768px) {
+  /* Navigation Mobile */
+  .nav {
+    padding: 0.75rem 0;
+  }
+
+  .nav-container {
+    padding: 0 1rem;
+  }
+
+  .nav .logo {
+    height: 45px;
+  }
+
   .nav-links {
-    gap: 1rem;
-    font-size: 0.9rem;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    flex-wrap: wrap;
+  }
+
+  .nav-links a {
+    white-space: nowrap;
+    padding: 0.35rem 0.75rem;
+  }
+
+  .nav-links .cta-button {
+    padding: 0.4rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  /* Container Mobile */
+  .container {
+    padding: 0 1rem;
+  }
+
+  /* Hero Mobile */
+  .hero-container {
+    padding: 2rem 1rem;
   }
 
   .hero-title {
-    font-size: 2.5rem;
+    font-size: 2rem;
+    line-height: 1.2;
   }
 
   .hero-subtitle {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 
   .hero-badge {
-    font-size: 0.85rem;
-    padding: 0.4rem 1rem;
+    font-size: 0.8rem;
+    padding: 0.35rem 0.85rem;
+  }
+
+  .hero-features {
+    gap: 0.75rem;
+  }
+
+  .hero-feature-item {
+    font-size: 0.9rem;
   }
 
   .hero-cta {
     flex-direction: column;
+    width: 100%;
   }
 
   .hero-cta button {
     width: 100%;
   }
 
-  .section-title {
-    font-size: 2rem;
+  /* Section Mobile */
+  .section {
+    padding: 3rem 0;
   }
 
+  .section-title {
+    font-size: 1.75rem;
+  }
+
+  /* About Mobile */
+  .about-subtitle,
+  .features-subtitle,
+  .clients-subtitle,
+  .pricing-subtitle {
+    font-size: 1rem;
+    padding: 0 1rem;
+  }
+
+  /* Grids Mobile */
   .features-grid,
   .pricing-grid,
   .clients-grid,
   .addons-grid,
   .about-grid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  /* Cards Mobile */
+  .about-card,
+  .feature-card,
+  .client-card {
+    padding: 1.75rem;
+  }
+
+  .feature-number {
+    font-size: 2rem;
+    top: 1rem;
+    right: 1rem;
+  }
+
+  /* Pilot Section Mobile */
+  .pilot-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .pilot-header h3 {
+    font-size: 1.75rem;
+  }
+
+  .pilot-header p {
+    font-size: 1rem;
+  }
+
+  .pilot-features {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .pilot-feature {
+    padding: 1.25rem;
+  }
+
+  /* Pricing Mobile */
+  .pricing-card {
+    padding: 2rem 1.5rem;
   }
 
   .pricing-card.featured {
     transform: scale(1);
   }
 
-  .pilot-features {
+  .pricing-tier {
+    font-size: 1.5rem;
+  }
+
+  .price-amount {
+    font-size: 2.5rem;
+  }
+
+  /* Contact Mobile */
+  .contact-section .section-title {
+    font-size: 2rem;
+  }
+
+  .contact-text {
+    font-size: 1.1rem;
+    padding: 0 1rem;
+  }
+
+  /* Footer Mobile */
+  .footer {
+    padding: 3rem 0 1.5rem;
+  }
+
+  .footer-content {
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Extra small mobile */
+  .nav-links a:not(.cta-button) {
+    display: none;
+  }
+
+  .nav-links {
+    justify-content: flex-end;
+    width: 100%;
+  }
+
+  .nav-links .cta-button {
+    margin-left: auto;
+  }
+
+  .hero-title {
+    font-size: 1.75rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+  }
+
+  .pricing-grid,
+  .addons-grid {
+    gap: 1rem;
+  }
+
+  /* Override minmax for very small screens */
+  .about-grid,
+  .features-grid,
+  .clients-grid {
     grid-template-columns: 1fr;
+  }
+
+  .about-card,
+  .feature-card,
+  .client-card,
+  .pricing-card {
+    padding: 1.5rem;
+  }
+
+  .pilot-card {
+    padding: 1.5rem 1rem;
+  }
+
+  .contact-text {
+    font-size: 1rem;
   }
 }
