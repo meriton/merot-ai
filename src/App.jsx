@@ -129,7 +129,7 @@ function App() {
       <div className={`scroll-banner ${showBanner ? 'show' : ''}`}>
         <div className="scroll-banner-container">
           <div className="scroll-banner-text">
-            <p className="scroll-banner-title">Unlock savings and accuracy for your data labeling!</p>
+            <p className="scroll-banner-title">Unlock savings and accuracy for your AI data and annotations</p>
             <p className="scroll-banner-subtitle">Speak with a team member today to start with MEROT.ai</p>
           </div>
           <button className="scroll-banner-button" onClick={scrollToContact}>
