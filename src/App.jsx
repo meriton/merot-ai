@@ -161,7 +161,7 @@ function App() {
       {/* Navigation */}
       <nav className="nav">
         <div className="nav-container">
-          <img src="/merotai-logo.png" alt="Merot.ai" className="logo" />
+          <img src="/merotai-logo.png" alt="Merot.ai - AI Data Annotation Platform Logo" className="logo" />
           <div className="nav-links">
             <a href="#about">About</a>
             <a href="#pilot">Pilot</a>
@@ -207,7 +207,7 @@ function App() {
             </div>
           </div>
           <div className="hero-image">
-            <img src="/hero.jpg" alt="Data annotation workspace" />
+            <img src="/hero.jpg" alt="Merot.ai professional AI data annotation and labeling workspace" />
             <div className="hero-overlay"></div>
           </div>
         </div>
@@ -633,7 +633,7 @@ function App() {
         <div className="container">
           <div className="footer-content">
             <div className="footer-section">
-              <img src="/merotai-logo.png" alt="Merot.ai" className="footer-logo" />
+              <img src="/merotai-logo.png" alt="Merot.ai - AI Data Annotation Platform Logo" className="footer-logo" />
               <p>AI Data Annotation Platform</p>
             </div>
             <div className="footer-section">
