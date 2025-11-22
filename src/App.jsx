@@ -237,7 +237,7 @@ function App() {
                 </svg>
               </div>
               <h3>Geographical Advantage</h3>
-              <p>Multilingual teams providing enterprise-grade quality at competitive rates. Native-level annotation across EN, DE, FR, and Balkan languages.</p>
+              <p>Our skilled workforce across Southeast Europe delivers enterprise-grade quality at competitive rates. Native-level annotation in English, German, French, Italian, and Balkan languages with deep cultural understanding.</p>
             </div>
             <div className="about-card">
               <div className="about-icon-wrapper">
