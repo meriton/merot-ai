@@ -176,7 +176,7 @@ function App() {
       <section className="hero">
         <div className="hero-container">
           <div className="hero-content">
-            <div className="hero-badge">>=99% Verified Accuracy</div>
+            <div className="hero-badge">99% Verified Accuracy</div>
             <h1 className="hero-title">Scalable Data Labeling for AI Teams</h1>
             <p className="hero-subtitle">
               Enterprise-ready annotation services powered by dedicated teams in Southeast Europe. Fast turnaround, full QA workflows, and multilingual coverage.
@@ -227,7 +227,7 @@ function App() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3>>=99% Verified Accuracy</h3>
+              <h3>99% Verified Accuracy</h3>
               <p>Professional data-labeling with dedicated annotators, structured QA processes, and complete transparency through weekly reporting and audit trails.</p>
             </div>
             <div className="about-card">
@@ -327,7 +327,7 @@ function App() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3>>=99% Verified Accuracy</h3>
+              <h3>99% Verified Accuracy</h3>
               <p>Structured QA processes with dedicated reviewers ensure exceptional quality on every project</p>
             </div>
             <div className="feature-card">
