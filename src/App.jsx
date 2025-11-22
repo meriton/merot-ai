@@ -18,6 +18,19 @@ function App() {
 
   useEffect(() => {
     const handleScroll = () => {
+      const contactSection = document.getElementById('contact')
+
+      // Check if contact section is in view
+      if (contactSection) {
+        const rect = contactSection.getBoundingClientRect()
+        const isContactVisible = rect.top < window.innerHeight && rect.bottom > 0
+
+        if (isContactVisible) {
+          setShowBanner(false)
+          return
+        }
+      }
+
       if (window.scrollY > 300) {
         setShowBanner(true)
       } else {
@@ -30,6 +43,14 @@ function App() {
   }, [])
 
   const scrollToContact = () => {
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  const selectPlan = (planName) => {
+    setFormData(prev => ({
+      ...prev,
+      message: `I'm interested in the ${planName} plan. Please provide more information.`
+    }))
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
   }
 
@@ -130,10 +151,9 @@ function App() {
         <div className="scroll-banner-container">
           <div className="scroll-banner-text">
             <p className="scroll-banner-title">Unlock savings and accuracy for your AI data and annotations</p>
-            <p className="scroll-banner-subtitle">Speak with a team member today to start with MEROT.ai</p>
           </div>
           <button className="scroll-banner-button" onClick={scrollToContact}>
-            Contact Us
+            Speak with a Team Member
           </button>
         </div>
       </div>
@@ -296,7 +316,7 @@ function App() {
       <section id="features" className="section features-section">
         <div className="container">
           <div className="features-header">
-            <h2 className="section-title features-title">What Makes Us Different</h2>
+            <h2 className="section-title features-title">What Sets Us Apart</h2>
             <p className="features-subtitle">Enterprise-grade capabilities that set us apart from basic annotation vendors</p>
           </div>
           <div className="features-grid">
@@ -443,7 +463,7 @@ function App() {
                 <li>Full reviewer logs included</li>
                 <li>No long-term commitment</li>
               </ul>
-              <button className="pricing-button">Start Pilot</button>
+              <button className="pricing-button" onClick={() => selectPlan('Pilot')}>Start Pilot</button>
             </div>
 
             <div className="pricing-card featured">
@@ -463,7 +483,7 @@ function App() {
                 <li>Text: $0.02-$0.04 per task</li>
                 <li>Images: $0.04-$0.08 per task</li>
               </ul>
-              <button className="pricing-button primary">Choose Plan</button>
+              <button className="pricing-button primary" onClick={() => selectPlan('Growth')}>Choose Plan</button>
             </div>
 
             <div className="pricing-card">
@@ -482,7 +502,7 @@ function App() {
                 <li>Weekly quality dashboards</li>
                 <li>Volume discounts applied</li>
               </ul>
-              <button className="pricing-button">Choose Plan</button>
+              <button className="pricing-button" onClick={() => selectPlan('Scale')}>Choose Plan</button>
             </div>
 
             <div className="pricing-card">
@@ -499,7 +519,7 @@ function App() {
                 <li>SLA guarantees</li>
                 <li>Custom integrations</li>
               </ul>
-              <button className="pricing-button">Contact Sales</button>
+              <button className="pricing-button" onClick={() => selectPlan('Enterprise')}>Choose Plan</button>
             </div>
           </div>
 
