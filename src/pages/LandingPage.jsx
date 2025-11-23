@@ -217,14 +217,13 @@ function LandingPage() {
             <a href="#features">Features</a>
             <a href="#pricing">Pricing</a>
             {token ? (
-              <Link to="/dashboard" className="nav-login">View Account</Link>
+              <Link to="/dashboard" className="nav-account">Dashboard</Link>
             ) : (
-              <>
-                <Link to="/login" className="nav-login">Login</Link>
+              <div className="nav-auth">
+                <Link to="/login" className="nav-login">Log In</Link>
                 <Link to="/register" className="nav-signup">Sign Up</Link>
-              </>
+              </div>
             )}
-            <a href="#contact" className="cta-button">Get Started</a>
           </div>
         </div>
       </nav>

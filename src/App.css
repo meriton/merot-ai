@@ -125,42 +125,56 @@
   color: #0066cc;
 }
 
+.nav-links .nav-auth {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .nav-links .nav-login {
-  color: #0066cc;
-  border: 1px solid #0066cc;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  transition: all 0.3s;
+  color: #ffffff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.2s;
+  font-weight: 500;
+  font-size: 14px;
 }
 
 .nav-links .nav-login:hover {
-  background: #0066cc;
-  color: white;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
 }
 
 .nav-links .nav-signup {
-  background: #0066cc;
+  background: #3b82f6;
   color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  transition: all 0.3s;
+  padding: 8px 20px;
+  border-radius: 8px;
+  transition: all 0.2s;
+  font-weight: 500;
+  font-size: 14px;
 }
 
 .nav-links .nav-signup:hover {
-  background: #0052a3;
+  background: #2563eb;
   color: white;
+  transform: translateY(-1px);
 }
 
-.nav-links .cta-button {
-  background: #0066cc;
-  color: white;
-  padding: 0.5rem 1.5rem;
-  border-radius: 6px;
+.nav-links .nav-account {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+  padding: 8px 20px;
+  border-radius: 8px;
+  transition: all 0.2s;
+  font-weight: 500;
+  font-size: 14px;
+  border: 1px solid rgba(59, 130, 246, 0.3);
 }
 
-.nav-links .cta-button:hover {
-  background: #0052a3;
-  color: white;
+.nav-links .nav-account:hover {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.5);
 }
 
 /* Container */
