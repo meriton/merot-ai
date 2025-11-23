@@ -31,129 +31,118 @@ const AdminDashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+      <div className="admin-page">
+        <div className="loading-container">
+          <div className="spinner"></div>
+        </div>
+        <style>{styles}</style>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-        <div className="bg-red-50 text-red-700 p-4 rounded-lg">
-          {error}
+      <div className="admin-page">
+        <div className="loading-container">
+          <div className="error-box">{error}</div>
         </div>
+        <style>{styles}</style>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="admin-page">
+      <div className="admin-container">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-          <p className="mt-2 text-gray-600">Overview of your platform metrics</p>
+        <div className="page-header">
+          <h1>Admin Dashboard</h1>
+          <p>Overview of your platform metrics</p>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="mb-8 border-b border-gray-200">
-          <nav className="-mb-px flex space-x-8">
-            <Link
-              to="/admin"
-              className="border-indigo-500 text-indigo-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
-            >
-              Dashboard
-            </Link>
-            <Link
-              to="/admin/users"
-              className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
-            >
-              Users
-            </Link>
-            <Link
-              to="/admin/plans"
-              className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
-            >
-              Plans
-            </Link>
+        <div className="nav-tabs">
+          <nav>
+            <Link to="/admin" className="nav-tab active">Dashboard</Link>
+            <Link to="/admin/users" className="nav-tab">Users</Link>
+            <Link to="/admin/plans" className="nav-tab">Plans</Link>
           </nav>
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0 bg-indigo-500 rounded-md p-3">
-                <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="stats-grid">
+          <div className="stat-card">
+            <div className="stat-content">
+              <div className="stat-icon indigo">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
                 </svg>
               </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Total Users</p>
-                <p className="text-2xl font-semibold text-gray-900">{stats.total_users}</p>
+              <div className="stat-text">
+                <p className="stat-label">Total Users</p>
+                <p className="stat-value">{stats.total_users}</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0 bg-green-500 rounded-md p-3">
-                <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="stat-card">
+            <div className="stat-content">
+              <div className="stat-icon green">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
                 </svg>
               </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">New This Month</p>
-                <p className="text-2xl font-semibold text-gray-900">{stats.users_this_month}</p>
+              <div className="stat-text">
+                <p className="stat-label">New This Month</p>
+                <p className="stat-value">{stats.users_this_month}</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0 bg-yellow-500 rounded-md p-3">
-                <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="stat-card">
+            <div className="stat-content">
+              <div className="stat-icon yellow">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                 </svg>
               </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Active Subscriptions</p>
-                <p className="text-2xl font-semibold text-gray-900">{stats.active_subscriptions}</p>
+              <div className="stat-text">
+                <p className="stat-label">Active Subscriptions</p>
+                <p className="stat-value">{stats.active_subscriptions}</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0 bg-purple-500 rounded-md p-3">
-                <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="stat-card">
+            <div className="stat-content">
+              <div className="stat-icon purple">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">MRR</p>
-                <p className="text-2xl font-semibold text-gray-900">{formatCurrency(stats.mrr_cents)}</p>
+              <div className="stat-text">
+                <p className="stat-label">MRR</p>
+                <p className="stat-value">{formatCurrency(stats.mrr_cents)}</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Plans Breakdown */}
-        <div className="bg-white rounded-lg shadow">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900">Subscribers by Plan</h2>
+        <div className="plans-breakdown">
+          <div className="breakdown-header">
+            <h2>Subscribers by Plan</h2>
           </div>
-          <div className="divide-y divide-gray-200">
+          <div className="breakdown-list">
             {stats.plans_breakdown?.map((plan) => (
-              <div key={plan.id} className="px-6 py-4 flex items-center justify-between">
+              <div key={plan.id} className="breakdown-item">
                 <div>
-                  <p className="font-medium text-gray-900">{plan.name}</p>
-                  <p className="text-sm text-gray-500">{plan.slug}</p>
+                  <p className="plan-name">{plan.name}</p>
+                  <p className="plan-slug">{plan.slug}</p>
                 </div>
-                <div className="text-right">
-                  <p className="text-lg font-semibold text-gray-900">{plan.subscriber_count}</p>
-                  <p className="text-sm text-gray-500">subscribers</p>
+                <div className="plan-stats">
+                  <p className="subscriber-count">{plan.subscriber_count}</p>
+                  <p className="subscriber-label">subscribers</p>
                 </div>
               </div>
             ))}
@@ -161,17 +150,254 @@ const AdminDashboard = () => {
         </div>
 
         {/* Back to Dashboard Link */}
-        <div className="mt-8">
-          <Link
-            to="/dashboard"
-            className="text-indigo-600 hover:text-indigo-800 font-medium"
-          >
-            &larr; Back to User Dashboard
-          </Link>
+        <div className="back-link">
+          <Link to="/dashboard">&larr; Back to User Dashboard</Link>
         </div>
       </div>
+
+      <style>{styles}</style>
     </div>
   );
 };
+
+const styles = `
+  .admin-page {
+    min-height: 100vh;
+    background: #f3f4f6;
+  }
+
+  .loading-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+
+  .spinner {
+    width: 48px;
+    height: 48px;
+    border: 3px solid #e5e7eb;
+    border-top-color: #4f46e5;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .error-box {
+    background: #fef2f2;
+    color: #b91c1c;
+    padding: 16px;
+    border-radius: 8px;
+  }
+
+  .admin-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 32px 16px;
+  }
+
+  @media (min-width: 640px) {
+    .admin-container { padding: 32px 24px; }
+  }
+
+  @media (min-width: 1024px) {
+    .admin-container { padding: 32px; }
+  }
+
+  .page-header {
+    margin-bottom: 32px;
+  }
+
+  .page-header h1 {
+    font-size: 30px;
+    font-weight: 700;
+    color: #111827;
+    margin: 0;
+  }
+
+  .page-header p {
+    margin-top: 8px;
+    color: #4b5563;
+  }
+
+  .nav-tabs {
+    margin-bottom: 32px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .nav-tabs nav {
+    display: flex;
+    gap: 32px;
+    margin-bottom: -1px;
+  }
+
+  .nav-tab {
+    padding: 16px 4px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #6b7280;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+
+  .nav-tab:hover {
+    color: #374151;
+    border-bottom-color: #d1d5db;
+  }
+
+  .nav-tab.active {
+    color: #4f46e5;
+    border-bottom-color: #4f46e5;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-bottom: 32px;
+  }
+
+  @media (min-width: 768px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (min-width: 1024px) {
+    .stats-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+
+  .stat-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+  }
+
+  .stat-content {
+    display: flex;
+    align-items: center;
+  }
+
+  .stat-icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 6px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .stat-icon svg {
+    width: 24px;
+    height: 24px;
+    color: white;
+  }
+
+  .stat-icon.indigo { background: #4f46e5; }
+  .stat-icon.green { background: #22c55e; }
+  .stat-icon.yellow { background: #eab308; }
+  .stat-icon.purple { background: #a855f7; }
+
+  .stat-text {
+    margin-left: 16px;
+  }
+
+  .stat-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #6b7280;
+    margin: 0;
+  }
+
+  .stat-value {
+    font-size: 24px;
+    font-weight: 600;
+    color: #111827;
+    margin: 4px 0 0 0;
+  }
+
+  .plans-breakdown {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .breakdown-header {
+    padding: 16px 24px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .breakdown-header h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
+  }
+
+  .breakdown-list {
+    divide-y: 1px solid #e5e7eb;
+  }
+
+  .breakdown-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .breakdown-item:last-child {
+    border-bottom: none;
+  }
+
+  .plan-name {
+    font-weight: 500;
+    color: #111827;
+    margin: 0;
+  }
+
+  .plan-slug {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 4px 0 0 0;
+  }
+
+  .plan-stats {
+    text-align: right;
+  }
+
+  .subscriber-count {
+    font-size: 18px;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
+  }
+
+  .subscriber-label {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 4px 0 0 0;
+  }
+
+  .back-link {
+    margin-top: 32px;
+  }
+
+  .back-link a {
+    color: #4f46e5;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .back-link a:hover {
+    color: #3730a3;
+  }
+`;
 
 export default AdminDashboard;
