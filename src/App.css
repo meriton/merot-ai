@@ -138,6 +138,19 @@
   color: white;
 }
 
+.nav-links .nav-signup {
+  background: #0066cc;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: all 0.3s;
+}
+
+.nav-links .nav-signup:hover {
+  background: #0052a3;
+  color: white;
+}
+
 .nav-links .cta-button {
   background: #0066cc;
   color: white;

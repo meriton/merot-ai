@@ -219,7 +219,10 @@ function LandingPage() {
             {token ? (
               <Link to="/dashboard" className="nav-login">View Account</Link>
             ) : (
-              <Link to="/login" className="nav-login">Login</Link>
+              <>
+                <Link to="/login" className="nav-login">Login</Link>
+                <Link to="/register" className="nav-signup">Sign Up</Link>
+              </>
             )}
             <a href="#contact" className="cta-button">Get Started</a>
           </div>
