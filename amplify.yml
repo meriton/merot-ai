@@ -6,6 +6,8 @@ frontend:
         - npm ci
     build:
       commands:
+        - echo "Building with API URL from .env.production"
+        - cat .env.production
         - npm run build
   artifacts:
     baseDirectory: dist
