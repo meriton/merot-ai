@@ -125,6 +125,19 @@
   color: #0066cc;
 }
 
+.nav-links .nav-login {
+  color: #0066cc;
+  border: 1px solid #0066cc;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: all 0.3s;
+}
+
+.nav-links .nav-login:hover {
+  background: #0066cc;
+  color: white;
+}
+
 .nav-links .cta-button {
   background: #0066cc;
   color: white;
@@ -852,6 +865,14 @@ section {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2rem;
   margin-top: 3rem;
+}
+
+.pricing-loading {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 4rem;
+  color: #6b7280;
+  font-size: 1.1rem;
 }
 
 .pricing-card {
