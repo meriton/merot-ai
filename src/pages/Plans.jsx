@@ -291,12 +291,14 @@ const Plans = () => {
           transform: translateX(-50%);
           background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
           color: #ffffff;
-          padding: 4px 16px;
+          padding: 6px 14px;
           border-radius: 20px;
-          font-size: 12px;
+          font-size: 11px;
           font-weight: 600;
           text-transform: uppercase;
           white-space: nowrap;
+          line-height: 1;
+          letter-spacing: 0.5px;
         }
 
         .current-badge {
