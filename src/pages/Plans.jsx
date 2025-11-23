@@ -265,6 +265,8 @@ const Plans = () => {
           padding: 32px 24px;
           position: relative;
           transition: all 0.3s;
+          display: flex;
+          flex-direction: column;
         }
 
         .plan-card:hover {
@@ -294,6 +296,7 @@ const Plans = () => {
           font-size: 12px;
           font-weight: 600;
           text-transform: uppercase;
+          white-space: nowrap;
         }
 
         .current-badge {
@@ -352,6 +355,7 @@ const Plans = () => {
           list-style: none;
           padding: 0;
           margin: 0 0 24px 0;
+          flex-grow: 1;
         }
 
         .plan-features li {
@@ -382,6 +386,7 @@ const Plans = () => {
           font-weight: 600;
           cursor: pointer;
           transition: all 0.2s;
+          margin-top: auto;
         }
 
         .plan-button:hover:not(:disabled) {
