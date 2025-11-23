@@ -132,7 +132,7 @@
 }
 
 .nav-links .nav-login {
-  color: #ffffff;
+  color: #374151;
   padding: 8px 16px;
   border-radius: 8px;
   transition: all 0.2s;
@@ -141,8 +141,8 @@
 }
 
 .nav-links .nav-login:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  background: rgba(0, 0, 0, 0.05);
+  color: #111827;
 }
 
 .nav-links .nav-signup {
