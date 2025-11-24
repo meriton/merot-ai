@@ -167,7 +167,9 @@ function LandingPage() {
       <section id="about" className="section about-section">
         <div className="container">
           <div className="about-header">
-            <h2 className="section-title about-title">Why MEROT.ai?</h2>
+            <h2 className="section-title about-title">
+              Why <img src="/merotai-logo.png" alt="MEROT.ai" className="about-logo" style={{ height: '1.5em', verticalAlign: 'middle' }} />?
+            </h2>
             <p className="about-subtitle">Enterprise-grade quality meets competitive pricing</p>
           </div>
           <div className="about-grid">
