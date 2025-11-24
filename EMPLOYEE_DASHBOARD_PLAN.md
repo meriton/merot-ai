@@ -89,6 +89,54 @@ Employee:
 **Next Steps:**
 - Sprint 1 Frontend: Admin UI for task assignment and management
 
+### 2025-11-24 - Sprint 2 Backend Complete ✅
+
+**Completed:**
+- ✅ Created AnnotationsController with full annotation lifecycle
+- ✅ Built auto-save draft functionality
+- ✅ Implemented submit for review workflow
+- ✅ Created ReviewsController for QA workflow
+- ✅ Built approve/reject/request_revision logic
+- ✅ Added quality scoring system
+- ✅ Implemented feedback and issue tracking
+- ✅ Version tracking for annotations
+- ✅ Time tracking (time_spent_seconds)
+- ✅ ML suggestions support structure
+- ✅ Complete audit trail integration
+
+**Features:**
+- Annotators can create, save drafts, and submit annotations
+- Auto-save support (draft status before submission)
+- Submit changes task status to 'review'
+- Reviewers see priority queue of tasks pending review
+- Approve updates employee quality score and completes task
+- Reject sends task back to annotator with feedback
+- Request revision allows iterative improvements
+- Reviewer statistics dashboard
+
+**API Endpoints Created:**
+
+Annotations:
+- `GET /api/v1/employee/annotations` - View all my annotations
+- `GET /api/v1/employee/annotations/:id` - View annotation details
+- `POST /api/v1/employee/tasks/:task_id/annotations` - Create annotation
+- `POST /api/v1/employee/tasks/:task_id/annotations/save_draft` - Auto-save draft
+- `POST /api/v1/employee/tasks/:task_id/annotations/submit` - Submit for review
+- `PATCH /api/v1/employee/annotations/:id` - Update annotation
+- `DELETE /api/v1/employee/annotations/:id` - Delete draft
+
+Reviews (Reviewer only):
+- `GET /api/v1/employee/reviews/queue` - Tasks pending review
+- `GET /api/v1/employee/reviews/annotation/:id` - Review details
+- `POST /api/v1/employee/reviews/annotation/:id/approve` - Approve annotation
+- `POST /api/v1/employee/reviews/annotation/:id/reject` - Reject annotation
+- `POST /api/v1/employee/reviews/annotation/:id/request_revision` - Request changes
+- `GET /api/v1/employee/reviews/my_reviews` - Reviewer history & stats
+
+**Next Steps:**
+- Sprint 2 Frontend: Text annotation UI components
+- Sprint 3: Image annotation interface
+
 ---
 
 ## Sprint 0: Foundation & Architecture (Week 1-2)
@@ -215,17 +263,23 @@ Employee:
 - Save and submit annotations
 
 ### Backend Tasks
-- [ ] **Annotation Storage API**
-  - [ ] POST `/api/employee/tasks/:id/annotations` - save annotation
-  - [ ] PATCH `/api/employee/tasks/:id/annotations/:annotation_id` - update
-  - [ ] POST `/api/employee/tasks/:id/submit` - submit for review
-  - [ ] POST `/api/employee/tasks/:id/save_draft` - save progress
+- [x] **Annotation Storage API** ✅
+  - [x] POST `/api/employee/tasks/:id/annotations` - save annotation
+  - [x] PATCH `/api/employee/tasks/:id/annotations/:annotation_id` - update
+  - [x] POST `/api/employee/tasks/:id/submit` - submit for review
+  - [x] POST `/api/employee/tasks/:id/save_draft` - save progress
 
-- [ ] **Annotation Schema**
-  - [ ] Support multiple annotation types (classification, NER, sentiment)
-  - [ ] JSON schema validation
-  - [ ] Version history tracking
-  - [ ] Auto-save mechanism
+- [x] **Annotation Schema** ✅
+  - [x] Support multiple annotation types (classification, NER, sentiment)
+  - [x] JSON flexible structure (annotation_data jsonb field)
+  - [x] Version history tracking
+  - [x] Auto-save mechanism (draft status)
+
+- [x] **QA Review Workflow** ✅
+  - [x] Review queue endpoint
+  - [x] Approve/reject/request_revision actions
+  - [x] Quality scoring
+  - [x] Feedback system
 
 ### Frontend Tasks
 - [ ] **Text Classification Interface**
