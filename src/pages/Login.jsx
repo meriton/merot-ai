@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import useAuthStore from '../stores/authStore';
+import { subscriptionsAPI } from '../services/api';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -22,7 +23,22 @@ const Login = () => {
     e.preventDefault();
     try {
       await login(formData);
-      navigate('/dashboard');
+
+      // Check if user was trying to checkout a plan before login
+      const pendingPlan = localStorage.getItem('pendingPlanCheckout');
+      if (pendingPlan) {
+        localStorage.removeItem('pendingPlanCheckout');
+        try {
+          const response = await subscriptionsAPI.checkout(pendingPlan);
+          window.location.href = response.data.checkout_url;
+        } catch (error) {
+          console.error('Checkout error:', error);
+          alert(error.response?.data?.error || 'Failed to start checkout. Redirecting to plans page.');
+          navigate('/plans');
+        }
+      } else {
+        navigate('/dashboard');
+      }
     } catch (err) {
       // Error is handled by the store
     }

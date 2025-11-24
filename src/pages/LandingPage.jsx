@@ -62,9 +62,10 @@ function LandingPage() {
   }
 
   const handleCheckout = async (plan) => {
-    // If user is not logged in, redirect to login with return URL
+    // If user is not logged in, store plan and redirect to login
     if (!token) {
-      navigate(`/login?redirect=/pricing&plan=${plan.slug}`)
+      localStorage.setItem('pendingPlanCheckout', plan.slug)
+      navigate('/register')
       return
     }
 
