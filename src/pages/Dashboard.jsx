@@ -32,6 +32,14 @@ const Dashboard = () => {
     syncInBackground();
   }, []);
 
+  // Redirect users without active subscription to plans page
+  useEffect(() => {
+    if (user && !user.subscription?.status ||
+        (user.subscription?.status !== 'active' && user.subscription?.status !== 'trialing')) {
+      navigate('/plans');
+    }
+  }, [user, navigate]);
+
   // Check for checkout success
   useEffect(() => {
     if (searchParams.get('checkout') === 'success') {
