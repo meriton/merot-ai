@@ -539,16 +539,19 @@ function LandingPage() {
                   </ul>
                   <button
                     className={`pricing-button ${plan.is_featured ? 'primary' : ''}`}
-                    onClick={() => handleCheckout(plan)}
-                    disabled={checkoutLoading === plan.id}
+                    onClick={() => {
+                      if (plan.slug === 'enterprise') {
+                        selectPlan(plan.name);
+                      } else {
+                        navigate('/register');
+                      }
+                    }}
                   >
-                    {checkoutLoading === plan.id
-                      ? 'Processing...'
-                      : plan.slug === 'enterprise'
-                        ? 'Contact Sales'
-                        : plan.slug === 'starter-pilot'
-                          ? 'Start Pilot'
-                          : 'Choose Plan'}
+                    {plan.slug === 'enterprise'
+                      ? 'Contact Sales'
+                      : plan.slug === 'starter-pilot'
+                        ? 'Start Pilot'
+                        : 'Choose Plan'}
                   </button>
                 </div>
               ))
