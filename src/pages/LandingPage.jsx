@@ -557,28 +557,6 @@ function LandingPage() {
               ))
             )}
           </div>
-
-          <div className="pricing-notes">
-            <h3>Add-Ons Available</h3>
-            <div className="addons-grid">
-              <div className="addon-item">
-                <strong>Extra QA Layer</strong>
-                <span>+$0.005-$0.02/task</span>
-              </div>
-              <div className="addon-item">
-                <strong>24-Hour Rush</strong>
-                <span>+10%</span>
-              </div>
-              <div className="addon-item">
-                <strong>Same-Day Delivery</strong>
-                <span>+20-30%</span>
-              </div>
-              <div className="addon-item">
-                <strong>Domain Specialist</strong>
-                <span>+$10-$20/hour</span>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
