@@ -51,6 +51,44 @@ Building a comprehensive employee dashboard where internal annotators can login,
 **Next Steps:**
 - Sprint 1: Task Management & Assignment System
 
+### 2025-11-24 - Sprint 1 Backend Complete ✅
+
+**Completed:**
+- ✅ Created AdminTasksController with full CRUD operations
+- ✅ Built manual task assignment (assign to specific employee)
+- ✅ Implemented auto-balance bulk assignment algorithm (round-robin with capacity check)
+- ✅ Created AdminEmployeesController with workload tracking
+- ✅ Built AdminProjectsController for project management
+- ✅ Added task filtering (status, type, project, employee)
+- ✅ Implemented search functionality (by ID, external_id)
+- ✅ Employee capacity tracking (max 10 active tasks per annotator)
+- ✅ Available employees endpoint for assignment UI
+- ✅ Task statistics dashboard endpoint
+
+**API Endpoints Created:**
+
+Admin:
+- `GET /api/v1/admin/tasks` - List all tasks with filters
+- `POST /api/v1/admin/tasks` - Create new task
+- `GET /api/v1/admin/tasks/:id` - View task details
+- `PATCH /api/v1/admin/tasks/:id` - Update task
+- `DELETE /api/v1/admin/tasks/:id` - Delete task
+- `POST /api/v1/admin/tasks/:id/assign` - Assign task to employee
+- `POST /api/v1/admin/tasks/bulk_assign` - Bulk assign (manual or auto-balance)
+- `GET /api/v1/admin/employees` - List employees with filters
+- `GET /api/v1/admin/employees/available_for_assignment` - Get available employees
+- `POST /api/v1/admin/employees` - Create employee
+- `PATCH /api/v1/admin/employees/:id` - Update employee
+- `GET /api/v1/admin/projects` - List projects
+- `POST /api/v1/admin/projects` - Create project
+- `PATCH /api/v1/admin/projects/:id` - Update project
+
+Employee:
+- `PATCH /api/v1/employee/tasks/:id/update_status` - Update task status
+
+**Next Steps:**
+- Sprint 1 Frontend: Admin UI for task assignment and management
+
 ---
 
 ## Sprint 0: Foundation & Architecture (Week 1-2)
@@ -120,24 +158,24 @@ Building a comprehensive employee dashboard where internal annotators can login,
 - Basic task filtering and search
 
 ### Backend Tasks
-- [ ] **Task Assignment API**
-  - [ ] GET `/api/employee/tasks` - fetch assigned tasks for logged-in employee
-  - [ ] GET `/api/employee/tasks/:id` - fetch single task details
-  - [ ] POST `/api/admin/tasks/:id/assign` - assign task to employee
-  - [ ] POST `/api/admin/tasks/bulk_assign` - assign multiple tasks
-  - [ ] PATCH `/api/employee/tasks/:id/status` - update task status
+- [x] **Task Assignment API** ✅
+  - [x] GET `/api/employee/tasks` - fetch assigned tasks for logged-in employee
+  - [x] GET `/api/employee/tasks/:id` - fetch single task details
+  - [x] POST `/api/admin/tasks/:id/assign` - assign task to employee
+  - [x] POST `/api/admin/tasks/bulk_assign` - assign multiple tasks
+  - [x] PATCH `/api/employee/tasks/:id/status` - update task status
 
-- [ ] **Task Filtering & Search**
-  - [ ] Filter by status (pending, in_progress, completed, review)
-  - [ ] Filter by project
-  - [ ] Filter by priority
-  - [ ] Search by task ID or keywords
-  - [ ] Sort by due date, priority, created date
+- [x] **Task Filtering & Search** ✅
+  - [x] Filter by status (pending, in_progress, completed, review)
+  - [x] Filter by project
+  - [x] Filter by priority
+  - [x] Search by task ID or keywords
+  - [x] Sort by due date, priority, created date
 
-- [ ] **Workload Balancing Logic**
-  - [ ] Auto-assignment algorithm based on employee capacity
-  - [ ] Track employee workload (active tasks count)
-  - [ ] Prevent overloading single employees
+- [x] **Workload Balancing Logic** ✅
+  - [x] Auto-assignment algorithm based on employee capacity
+  - [x] Track employee workload (active tasks count)
+  - [x] Prevent overloading single employees
 
 ### Frontend Tasks
 - [ ] **Task List View**
