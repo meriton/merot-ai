@@ -9,12 +9,34 @@ function ReviewQueue() {
   const [error, setError] = useState(null);
   const [filters, setFilters] = useState({
     project_id: '',
-    annotation_type: ''
+    annotation_type: '',
+    annotator_id: '',
+    start_date: '',
+    end_date: '',
+    sort_by: 'due_date' // due_date, priority, created_at
   });
+  const [projects, setProjects] = useState([]);
+  const [annotators, setAnnotators] = useState([]);
 
   useEffect(() => {
     fetchQueue();
   }, [filters]);
+
+  useEffect(() => {
+    fetchFiltersData();
+  }, []);
+
+  const fetchFiltersData = async () => {
+    try {
+      // Fetch projects and annotators for filter dropdowns
+      // Note: These endpoints would need to be added to the API if they don't exist
+      // For now, we'll use placeholder data
+      setProjects([]);
+      setAnnotators([]);
+    } catch (err) {
+      console.error('Failed to load filter data:', err);
+    }
+  };
 
   const fetchQueue = async () => {
     setLoading(true);
@@ -93,14 +115,98 @@ function ReviewQueue() {
       </div>
 
       <div className="queue-filters">
-        <select
-          name="project_id"
-          value={filters.project_id}
-          onChange={handleFilterChange}
-          className="filter-select"
-        >
-          <option value="">All Projects</option>
-        </select>
+        <div className="filters-row">
+          <select
+            name="project_id"
+            value={filters.project_id}
+            onChange={handleFilterChange}
+            className="filter-select"
+          >
+            <option value="">All Projects</option>
+            {projects.map(project => (
+              <option key={project.id} value={project.id}>{project.name}</option>
+            ))}
+          </select>
+
+          <select
+            name="annotation_type"
+            value={filters.annotation_type}
+            onChange={handleFilterChange}
+            className="filter-select"
+          >
+            <option value="">All Types</option>
+            <option value="text_classification">Text Classification</option>
+            <option value="named_entity_recognition">NER</option>
+            <option value="sentiment_analysis">Sentiment</option>
+            <option value="image_classification">Image Classification</option>
+            <option value="bounding_box">Bounding Box</option>
+            <option value="polygon_segmentation">Polygon</option>
+            <option value="keypoint_annotation">Keypoint</option>
+          </select>
+
+          <select
+            name="annotator_id"
+            value={filters.annotator_id}
+            onChange={handleFilterChange}
+            className="filter-select"
+          >
+            <option value="">All Annotators</option>
+            {annotators.map(annotator => (
+              <option key={annotator.id} value={annotator.id}>
+                {annotator.first_name} {annotator.last_name}
+              </option>
+            ))}
+          </select>
+
+          <select
+            name="sort_by"
+            value={filters.sort_by}
+            onChange={handleFilterChange}
+            className="filter-select"
+          >
+            <option value="due_date">Sort by Due Date</option>
+            <option value="priority">Sort by Priority</option>
+            <option value="created_at">Sort by Submitted Date</option>
+          </select>
+        </div>
+
+        <div className="filters-row">
+          <div className="date-filter">
+            <label>From:</label>
+            <input
+              type="date"
+              name="start_date"
+              value={filters.start_date}
+              onChange={handleFilterChange}
+              className="date-input"
+            />
+          </div>
+
+          <div className="date-filter">
+            <label>To:</label>
+            <input
+              type="date"
+              name="end_date"
+              value={filters.end_date}
+              onChange={handleFilterChange}
+              className="date-input"
+            />
+          </div>
+
+          <button
+            onClick={() => setFilters({
+              project_id: '',
+              annotation_type: '',
+              annotator_id: '',
+              start_date: '',
+              end_date: '',
+              sort_by: 'due_date'
+            })}
+            className="clear-filters-btn"
+          >
+            Clear Filters
+          </button>
+        </div>
       </div>
 
       {loading ? (
@@ -254,12 +360,27 @@ function ReviewQueue() {
         }
 
         .queue-filters {
-          display: flex;
-          gap: 16px;
           margin-bottom: 24px;
+          background: white;
+          padding: 20px;
+          border-radius: 12px;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .filters-row {
+          display: flex;
+          gap: 12px;
+          margin-bottom: 12px;
+          flex-wrap: wrap;
+        }
+
+        .filters-row:last-child {
+          margin-bottom: 0;
         }
 
         .filter-select {
+          flex: 1;
+          min-width: 180px;
           padding: 10px 16px;
           border: 2px solid #e0e0e0;
           border-radius: 8px;
@@ -272,6 +393,49 @@ function ReviewQueue() {
         .filter-select:focus {
           outline: none;
           border-color: #667eea;
+        }
+
+        .date-filter {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+
+        .date-filter label {
+          font-size: 14px;
+          font-weight: 500;
+          color: #666;
+        }
+
+        .date-input {
+          padding: 10px 16px;
+          border: 2px solid #e0e0e0;
+          border-radius: 8px;
+          font-size: 14px;
+          transition: border-color 0.2s;
+        }
+
+        .date-input:focus {
+          outline: none;
+          border-color: #667eea;
+        }
+
+        .clear-filters-btn {
+          padding: 10px 20px;
+          background: transparent;
+          border: 2px solid #e0e0e0;
+          border-radius: 8px;
+          font-size: 14px;
+          font-weight: 500;
+          color: #666;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .clear-filters-btn:hover {
+          border-color: #667eea;
+          color: #667eea;
+          background: #f8f9ff;
         }
 
         .queue-loading,
@@ -480,11 +644,25 @@ function ReviewQueue() {
             gap: 16px;
           }
 
-          .queue-filters {
+          .filters-row {
             flex-direction: column;
           }
 
           .filter-select {
+            width: 100%;
+            min-width: auto;
+          }
+
+          .date-filter {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+
+          .date-input {
+            width: 100%;
+          }
+
+          .clear-filters-btn {
             width: 100%;
           }
 

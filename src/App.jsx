@@ -23,6 +23,7 @@ import EmployeeTasks from './pages/employee/EmployeeTasks'
 import TaskAnnotation from './pages/employee/TaskAnnotation'
 import ReviewQueue from './pages/employee/ReviewQueue'
 import ReviewAnnotation from './pages/employee/ReviewAnnotation'
+import RevisionInterface from './pages/employee/RevisionInterface'
 import EmployeeAnalytics from './pages/employee/EmployeeAnalytics'
 import EmployeeProtectedRoute from './components/EmployeeProtectedRoute'
 import useEmployeeAuthStore from './stores/employeeAuthStore'
@@ -123,6 +124,7 @@ function App() {
           <Route path="tasks/:taskId" element={<TaskAnnotation />} />
           <Route path="reviews" element={<ReviewQueue />} />
           <Route path="review/:annotationId" element={<ReviewAnnotation />} />
+          <Route path="revisions" element={<RevisionInterface />} />
           <Route path="analytics" element={<EmployeeAnalytics />} />
         </Route>
       </Routes>
