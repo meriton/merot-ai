@@ -118,6 +118,7 @@ function Contact() {
           <div className="contact-header">
             <h1>Ready to Get Started?</h1>
             <p>Join leading companies using Merot.ai for their data annotation needs</p>
+            <p className="response-time">A member of our team will contact you within the next hour</p>
           </div>
 
           <form onSubmit={handleSubmit} className="contact-form">
@@ -298,6 +299,13 @@ function Contact() {
         .contact-header p {
           font-size: 18px;
           color: #8892a0;
+        }
+
+        .contact-header .response-time {
+          font-size: 16px;
+          color: #60a5fa;
+          font-weight: 500;
+          margin-top: 8px;
         }
 
         .contact-form {
