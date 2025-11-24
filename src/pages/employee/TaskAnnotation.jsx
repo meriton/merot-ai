@@ -7,6 +7,8 @@ import SentimentAnnotation from '../../components/annotations/SentimentAnnotatio
 import ImageAnnotation from '../../components/annotations/ImageAnnotation';
 import PolygonAnnotation from '../../components/annotations/PolygonAnnotation';
 import KeypointAnnotation from '../../components/annotations/KeypointAnnotation';
+import AudioAnnotation from './AudioAnnotation';
+import VideoAnnotation from './VideoAnnotation';
 
 function TaskAnnotation() {
   const { taskId } = useParams();
@@ -163,22 +165,11 @@ function TaskAnnotation() {
         return <KeypointAnnotation {...componentProps} />;
 
       case 'audio_transcription':
-        return (
-          <div className="annotation-placeholder">
-            <h3>Audio Transcription</h3>
-            <p>Audio transcription component coming soon...</p>
-            <button onClick={handleCancel} className="back-btn">Back to Tasks</button>
-          </div>
-        );
+      case 'audio_annotation':
+        return <AudioAnnotation task={task} existingAnnotation={annotation} onSave={handleSaveDraft} onSubmit={async (annotationData) => await handleSubmit(annotationData)} />;
 
       case 'video_annotation':
-        return (
-          <div className="annotation-placeholder">
-            <h3>Video Annotation</h3>
-            <p>Video annotation component coming soon...</p>
-            <button onClick={handleCancel} className="back-btn">Back to Tasks</button>
-          </div>
-        );
+        return <VideoAnnotation task={task} existingAnnotation={annotation} onSave={handleSaveDraft} onSubmit={async (annotationData) => await handleSubmit(annotationData)} />;
 
       default:
         return (
