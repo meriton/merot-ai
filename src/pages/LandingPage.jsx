@@ -11,18 +11,6 @@ function LandingPage() {
   const [plans, setPlans] = useState([])
   const [plansLoading, setPlansLoading] = useState(true)
   const [checkoutLoading, setCheckoutLoading] = useState(null)
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    company: '',
-    message: ''
-  })
-  const [formStatus, setFormStatus] = useState({
-    submitting: false,
-    success: false,
-    error: false,
-    message: ''
-  })
 
   // Fetch plans from API
   useEffect(() => {
@@ -66,15 +54,11 @@ function LandingPage() {
   }, [])
 
   const scrollToContact = () => {
-    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+    navigate('/contact')
   }
 
   const selectPlan = (planName) => {
-    setFormData(prev => ({
-      ...prev,
-      message: `I'm interested in the ${planName} plan. Please provide more information.`
-    }))
-    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+    navigate('/contact')
   }
 
   const handleCheckout = async (plan) => {
@@ -84,7 +68,7 @@ function LandingPage() {
       return
     }
 
-    // If plan is Enterprise or doesn't have stripe_price_id, use contact form
+    // If plan is Enterprise or doesn't have stripe_price_id, redirect to contact
     if (plan.slug === 'enterprise' || !plan.stripe_price_id) {
       selectPlan(plan.name)
       return
@@ -100,96 +84,6 @@ function LandingPage() {
       alert(error.response?.data?.error || 'Failed to start checkout. Please try again.')
     } finally {
       setCheckoutLoading(null)
-    }
-  }
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }))
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-
-    // Basic validation
-    if (!formData.name || !formData.email || !formData.message) {
-      setFormStatus({
-        submitting: false,
-        success: false,
-        error: true,
-        message: 'Please fill in all required fields.'
-      })
-      return
-    }
-
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(formData.email)) {
-      setFormStatus({
-        submitting: false,
-        success: false,
-        error: true,
-        message: 'Please enter a valid email address.'
-      })
-      return
-    }
-
-    setFormStatus({
-      submitting: true,
-      success: false,
-      error: false,
-      message: ''
-    })
-
-    try {
-      // Using Formspree - free service for contact forms
-      const formspreeUrl = import.meta.env.VITE_FORMSPREE_URL || 'https://formspree.io/f/YOUR_FORM_ID';
-
-      const response = await fetch(formspreeUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          company: formData.company || 'Not provided',
-          message: formData.message,
-          _replyto: formData.email,
-          _subject: 'New Contact Form Submission from Merot.ai'
-        })
-      })
-
-      if (response.ok) {
-        setFormStatus({
-          submitting: false,
-          success: true,
-          error: false,
-          message: 'Thank you! We\'ll get back to you shortly.'
-        })
-        // Reset form
-        setFormData({
-          name: '',
-          email: '',
-          company: '',
-          message: ''
-        })
-      } else {
-        const errorData = await response.json()
-        console.error('Formspree error:', errorData)
-        throw new Error('Form submission failed')
-      }
-    } catch (error) {
-      console.error('Submission error:', error)
-      setFormStatus({
-        submitting: false,
-        success: false,
-        error: true,
-        message: 'Something went wrong. Please try again or email us directly at contact@merot.ai'
-      })
     }
   }
 
@@ -563,81 +457,15 @@ function LandingPage() {
       {/* Contact Section */}
       <section id="contact" className="section contact-section">
         <div className="container">
-          <h2 className="section-title">Ready to Get Started?</h2>
-          <p className="contact-text">
-            Join leading companies using Merot.ai for their data annotation needs
-          </p>
-
-          <form className="contact-form" onSubmit={handleSubmit}>
-            <div className="form-grid">
-              <div className="form-group">
-                <label htmlFor="name">Name *</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  placeholder="Your name"
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="email">Email *</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  placeholder="your.email@company.com"
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="company">Company</label>
-                <input
-                  type="text"
-                  id="company"
-                  name="company"
-                  value={formData.company}
-                  onChange={handleInputChange}
-                  placeholder="Your company name"
-                />
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="message">Message *</label>
-              <textarea
-                id="message"
-                name="message"
-                value={formData.message}
-                onChange={handleInputChange}
-                placeholder="Tell us about your data annotation needs..."
-                rows="5"
-                required
-              ></textarea>
-            </div>
-
-            {formStatus.error && (
-              <div className="form-message error">{formStatus.message}</div>
-            )}
-
-            {formStatus.success && (
-              <div className="form-message success">{formStatus.message}</div>
-            )}
-
-            <button
-              type="submit"
-              className="primary-button large"
-              disabled={formStatus.submitting}
-            >
-              {formStatus.submitting ? 'Sending...' : 'Send Message'}
+          <div className="contact-cta">
+            <h2 className="section-title">Ready to Get Started?</h2>
+            <p className="contact-text">
+              Join leading companies using Merot.ai for their data annotation needs
+            </p>
+            <button onClick={() => navigate('/contact')} className="primary-button large">
+              Contact Us
             </button>
-          </form>
+          </div>
         </div>
       </section>
 

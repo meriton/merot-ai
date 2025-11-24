@@ -57,6 +57,10 @@ export const subscriptionsAPI = {
   sync: () => api.post('/subscriptions/sync'),
 };
 
+export const contactAPI = {
+  submit: (contactData) => api.post('/contact_requests', { contact_request: contactData }),
+};
+
 export const adminAPI = {
   // Dashboard
   getStats: () => api.get('/admin/dashboard/stats'),

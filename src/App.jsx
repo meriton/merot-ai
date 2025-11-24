@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import LandingPage from './pages/LandingPage'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import Contact from './pages/Contact'
 import Dashboard from './pages/Dashboard'
 import Plans from './pages/Plans'
 import AdminDashboard from './pages/admin/AdminDashboard'
@@ -39,6 +40,7 @@ function App() {
           path="/register"
           element={token ? <Navigate to="/dashboard" replace /> : <Register />}
         />
+        <Route path="/contact" element={<Contact />} />
         <Route
           path="/dashboard"
           element={
