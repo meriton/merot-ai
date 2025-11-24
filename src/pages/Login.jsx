@@ -21,8 +21,16 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await login(formData);
-      navigate('/dashboard');
+      const response = await login(formData);
+      const user = response.user;
+
+      // Check if user has an active subscription
+      if (user.subscription_status === 'active' || user.subscription_status === 'trialing') {
+        navigate('/dashboard');
+      } else {
+        // No subscription, redirect to pricing
+        navigate('/pricing');
+      }
     } catch (err) {
       // Error is handled by the store
     }
