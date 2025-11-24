@@ -201,9 +201,14 @@ function LandingPage() {
           <div className="scroll-banner-text">
             <p className="scroll-banner-title">Unlock savings and accuracy for your AI data and annotations</p>
           </div>
-          <button className="scroll-banner-button" onClick={scrollToContact}>
-            Speak with a Team Member
-          </button>
+          <div className="scroll-banner-buttons">
+            <button className="scroll-banner-button primary" onClick={() => navigate('/register')}>
+              Start Now
+            </button>
+            <button className="scroll-banner-button" onClick={scrollToContact}>
+              Speak with a Team Member
+            </button>
+          </div>
         </div>
       </div>
 
