@@ -889,7 +889,7 @@ section {
 
 .pricing-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 2rem;
   margin-top: 3rem;
 }
@@ -909,6 +909,8 @@ section {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
   position: relative;
   transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
 }
 
 .pricing-card:hover {
@@ -968,6 +970,7 @@ section {
   list-style: none;
   padding: 0;
   margin: 2rem 0;
+  flex-grow: 1;
 }
 
 .pricing-features li {
@@ -991,6 +994,7 @@ section {
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.3s, color 0.3s;
+  margin-top: auto;
 }
 
 .pricing-button:hover {
