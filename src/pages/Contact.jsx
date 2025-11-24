@@ -234,36 +234,35 @@ function Contact() {
       <style>{`
         .contact-page {
           min-height: 100vh;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          background: #f5f7fa;
         }
 
         .contact-nav {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 20px 40px;
-          background: rgba(255, 255, 255, 0.1);
-          backdrop-filter: blur(10px);
+          padding: 16px 32px;
+          background: white;
+          border-bottom: 1px solid #e0e0e0;
         }
 
         .nav-logo .logo {
           height: 32px;
-          filter: brightness(0) invert(1);
         }
 
         .back-link {
           display: flex;
           align-items: center;
           gap: 8px;
-          color: white;
+          color: #667eea;
           text-decoration: none;
           font-size: 14px;
           font-weight: 500;
-          transition: opacity 0.2s;
+          transition: color 0.2s;
         }
 
         .back-link:hover {
-          opacity: 0.8;
+          color: #5568d3;
         }
 
         .contact-container {
@@ -277,9 +276,9 @@ function Contact() {
           max-width: 800px;
           width: 100%;
           background: white;
-          border-radius: 16px;
+          border-radius: 12px;
           padding: 48px;
-          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
 
         .contact-header {
@@ -373,9 +372,9 @@ function Contact() {
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           color: white;
           border: none;
-          padding: 16px 32px;
+          padding: 14px 32px;
           border-radius: 8px;
-          font-size: 16px;
+          font-size: 15px;
           font-weight: 600;
           cursor: pointer;
           transition: all 0.2s;
@@ -389,6 +388,7 @@ function Contact() {
         .submit-button:disabled {
           opacity: 0.6;
           cursor: not-allowed;
+          transform: none;
         }
 
         @media (max-width: 768px) {
