@@ -42,7 +42,9 @@ function LearnMore() {
       {/* Hero Section */}
       <section className="learn-more-hero">
         <div className="hero-content">
-          <h1>Why Merot.ai?</h1>
+          <h1>
+            Why <img src="/merotai-logo.png" alt="Merot.ai" className="hero-logo" />?
+          </h1>
           <p className="hero-subtitle">
             Enterprise-grade annotation quality at startup-friendly prices, powered by dedicated teams in Southeast Europe
           </p>
@@ -121,23 +123,38 @@ function LearnMore() {
           padding: 80px 20px;
           text-align: center;
           color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
 
         .hero-content {
           max-width: 800px;
           margin: 0 auto;
+          text-align: center;
         }
 
         .hero-content h1 {
           font-size: 48px;
           font-weight: 700;
           margin-bottom: 16px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 16px;
+        }
+
+        .hero-logo {
+          height: 48px;
+          filter: brightness(0) invert(1);
+          vertical-align: middle;
         }
 
         .hero-subtitle {
           font-size: 20px;
           opacity: 0.95;
           line-height: 1.6;
+          text-align: center;
         }
 
         .faq-section {
@@ -273,6 +290,11 @@ function LearnMore() {
 
           .hero-content h1 {
             font-size: 36px;
+            flex-wrap: wrap;
+          }
+
+          .hero-logo {
+            height: 36px;
           }
 
           .hero-subtitle {
