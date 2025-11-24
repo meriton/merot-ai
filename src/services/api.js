@@ -156,6 +156,8 @@ export const employeeAPI = {
     employeeApiInstance.post(`/employee/tasks/${taskId}/annotations/save_draft`, { annotation: annotationData }),
   submitAnnotation: (taskId, annotationData) =>
     employeeApiInstance.post(`/employee/tasks/${taskId}/annotations/submit`, { annotation: annotationData }),
+  unsubmitAnnotation: (taskId) =>
+    employeeApiInstance.post(`/employee/tasks/${taskId}/annotations/unsubmit`),
 
   // Reviews (for reviewers)
   getReviewQueue: (params = {}) => employeeApiInstance.get('/employee/reviews/queue', { params }),

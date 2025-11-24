@@ -14,6 +14,7 @@ function TaskAnnotation() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [starting, setStarting] = useState(false);
+  const [unsubmitting, setUnsubmitting] = useState(false);
 
   useEffect(() => {
     fetchTask();
@@ -57,21 +58,35 @@ function TaskAnnotation() {
   };
 
   const handleSaveDraft = async (annotationData) => {
+    console.log('=== handleSaveDraft called ===');
+    console.log('TaskId:', taskId);
+    console.log('Annotation Data:', annotationData);
     try {
+      console.log('Making API call to saveDraft...');
       const response = await employeeAPI.saveDraft(taskId, annotationData);
+      console.log('Save draft response:', response.data);
       setAnnotation(response.data.annotation);
       alert('Draft saved successfully!');
     } catch (err) {
+      console.error('Save draft error:', err);
+      console.error('Error response:', err.response?.data);
       throw err;
     }
   };
 
   const handleSubmit = async (annotationData) => {
+    console.log('=== handleSubmit called ===');
+    console.log('TaskId:', taskId);
+    console.log('Annotation Data:', annotationData);
     try {
+      console.log('Making API call to submitAnnotation...');
       await employeeAPI.submitAnnotation(taskId, annotationData);
+      console.log('Submit successful!');
       alert('Annotation submitted successfully!');
       navigate('/employee/tasks');
     } catch (err) {
+      console.error('Submit error:', err);
+      console.error('Error response:', err.response?.data);
       throw err;
     }
   };
@@ -79,6 +94,32 @@ function TaskAnnotation() {
   const handleCancel = () => {
     if (window.confirm('Are you sure you want to cancel? Any unsaved changes will be lost.')) {
       navigate('/employee/tasks');
+    }
+  };
+
+  const handleUnsubmit = async () => {
+    if (!window.confirm('Are you sure you want to unsubmit this annotation? It will return to draft status.')) {
+      return;
+    }
+
+    console.log('=== handleUnsubmit called ===');
+    console.log('TaskId:', taskId);
+
+    setUnsubmitting(true);
+    try {
+      console.log('Making API call to unsubmitAnnotation...');
+      const response = await employeeAPI.unsubmitAnnotation(taskId);
+      console.log('Unsubmit response:', response.data);
+
+      // Refresh the task to get updated status
+      await fetchTask();
+      alert('Annotation unsubmitted successfully! You can now edit it.');
+    } catch (err) {
+      console.error('Unsubmit error:', err);
+      console.error('Error response:', err.response?.data);
+      alert(err.response?.data?.error || 'Failed to unsubmit annotation');
+    } finally {
+      setUnsubmitting(false);
     }
   };
 
@@ -182,9 +223,20 @@ function TaskAnnotation() {
             </div>
           </div>
         </div>
-        {starting && (
-          <div className="starting-badge">Starting task...</div>
-        )}
+        <div className="task-header-actions">
+          {starting && (
+            <div className="starting-badge">Starting task...</div>
+          )}
+          {task?.current_annotation?.status === 'submitted' && (
+            <button
+              onClick={handleUnsubmit}
+              disabled={unsubmitting}
+              className="unsubmit-btn"
+            >
+              {unsubmitting ? 'Unsubmitting...' : 'Unsubmit & Edit'}
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Guidelines */}
@@ -376,6 +428,12 @@ function TaskAnnotation() {
           color: #c62828;
         }
 
+        .task-header-actions {
+          display: flex;
+          gap: 12px;
+          align-items: center;
+        }
+
         .starting-badge {
           background: #e8f5e9;
           color: #2e7d32;
@@ -383,6 +441,29 @@ function TaskAnnotation() {
           border-radius: 8px;
           font-size: 13px;
           font-weight: 600;
+        }
+
+        .unsubmit-btn {
+          background: #ff9800;
+          color: white;
+          padding: 8px 16px;
+          border-radius: 8px;
+          font-size: 13px;
+          font-weight: 600;
+          border: none;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .unsubmit-btn:hover:not(:disabled) {
+          background: #f57c00;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 8px rgba(245, 124, 0, 0.3);
+        }
+
+        .unsubmit-btn:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
         }
 
         .guidelines-section {

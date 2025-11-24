@@ -27,7 +27,8 @@ function EmployeeAnalytics() {
       setLeaderboard(leaderboardResponse.data.leaderboard || []);
       setError(null);
     } catch (err) {
-      setError(err.response?.data?.error || 'Failed to load analytics');
+      console.error('Analytics fetch error:', err);
+      setError(err.response?.data?.error || err.message || 'Failed to load analytics');
     } finally {
       setLoading(false);
     }

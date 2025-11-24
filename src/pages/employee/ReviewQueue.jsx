@@ -4,11 +4,11 @@ import { employeeAPI } from '../../services/api';
 
 function ReviewQueue() {
   const navigate = useNavigate();
-  const [annotations, setAnnotations] = useState([]);
+  const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filters, setFilters] = useState({
-    status: 'pending',
+    project_id: '',
     annotation_type: ''
   });
 
@@ -20,7 +20,7 @@ function ReviewQueue() {
     setLoading(true);
     try {
       const response = await employeeAPI.getReviewQueue(filters);
-      setAnnotations(response.data.annotations || []);
+      setTasks(response.data.tasks || []);
       setError(null);
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to load review queue');
@@ -34,8 +34,8 @@ function ReviewQueue() {
     setFilters(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleReviewClick = (annotation) => {
-    navigate(`/employee/review/${annotation.id}`);
+  const handleReviewClick = (task) => {
+    navigate(`/employee/review/${task.annotation.id}`);
   };
 
   const getStatusColor = (status) => {
@@ -49,8 +49,8 @@ function ReviewQueue() {
     return colors[status] || '#999';
   };
 
-  const getPriorityBadge = (task) => {
-    if (!task?.priority) return null;
+  const getPriorityBadge = (priority) => {
+    if (!priority) return null;
 
     const colors = {
       low: '#f5f5f5',
@@ -68,11 +68,11 @@ function ReviewQueue() {
       <span
         className="priority-badge"
         style={{
-          background: colors[task.priority],
-          color: textColors[task.priority]
+          background: colors[priority],
+          color: textColors[priority]
         }}
       >
-        {task.priority} priority
+        {priority} priority
       </span>
     );
   };
@@ -86,7 +86,7 @@ function ReviewQueue() {
         </div>
         <div className="queue-stats">
           <div className="stat-box">
-            <span className="stat-value">{annotations.length}</span>
+            <span className="stat-value">{tasks.length}</span>
             <span className="stat-label">In Queue</span>
           </div>
         </div>
@@ -94,27 +94,12 @@ function ReviewQueue() {
 
       <div className="queue-filters">
         <select
-          name="status"
-          value={filters.status}
+          name="project_id"
+          value={filters.project_id}
           onChange={handleFilterChange}
           className="filter-select"
         >
-          <option value="pending">Pending Review</option>
-          <option value="in_review">In Review</option>
-          <option value="all">All</option>
-        </select>
-
-        <select
-          name="annotation_type"
-          value={filters.annotation_type}
-          onChange={handleFilterChange}
-          className="filter-select"
-        >
-          <option value="">All Types</option>
-          <option value="text_classification">Text Classification</option>
-          <option value="ner">Named Entity Recognition</option>
-          <option value="bounding_box">Image Bounding Box</option>
-          <option value="audio_transcription">Audio Transcription</option>
+          <option value="">All Projects</option>
         </select>
       </div>
 
@@ -127,77 +112,77 @@ function ReviewQueue() {
         <div className="queue-error">
           <p>{error}</p>
         </div>
-      ) : annotations.length === 0 ? (
+      ) : tasks.length === 0 ? (
         <div className="queue-empty">
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="64" height="64">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <p>No annotations in queue</p>
-          <span>Annotations will appear here when submitted for review</span>
+          <p>No tasks in queue</p>
+          <span>Tasks will appear here when submitted for review</span>
         </div>
       ) : (
         <div className="queue-list">
-          {annotations.map(annotation => (
+          {tasks.map(task => (
             <div
-              key={annotation.id}
+              key={task.id}
               className="annotation-card"
-              onClick={() => handleReviewClick(annotation)}
+              onClick={() => handleReviewClick(task)}
             >
               <div className="card-header">
                 <div className="header-left">
-                  <span className="annotation-id">#{annotation.id}</span>
+                  <span className="annotation-id">Task #{task.id}</span>
                   <span
                     className="annotation-status"
-                    style={{ background: getStatusColor(annotation.status) }}
+                    style={{ background: getStatusColor('pending') }}
                   >
-                    {annotation.status.replace('_', ' ')}
+                    pending review
                   </span>
                   <span className="annotation-type">
-                    {annotation.annotation_type.replace('_', ' ')}
+                    {task.task_type.replace('_', ' ')}
                   </span>
                 </div>
-                {getPriorityBadge(annotation.task)}
+                {getPriorityBadge(task.priority)}
               </div>
 
               <div className="card-body">
                 <div className="annotation-info">
                   <div className="info-row">
-                    <span className="info-label">Task:</span>
+                    <span className="info-label">Project:</span>
                     <span className="info-value">
-                      #{annotation.task_id} - {annotation.task?.project?.name || 'Unknown Project'}
+                      {task.project?.name || 'Unknown Project'}
                     </span>
                   </div>
                   <div className="info-row">
                     <span className="info-label">Annotator:</span>
-                    <span className="info-value">{annotation.employee?.full_name || 'Unknown'}</span>
+                    <span className="info-value">{task.annotator?.full_name || 'Unknown'}</span>
                   </div>
                   <div className="info-row">
                     <span className="info-label">Submitted:</span>
                     <span className="info-value">
-                      {annotation.submitted_at
-                        ? new Date(annotation.submitted_at).toLocaleString()
+                      {task.submitted_at
+                        ? new Date(task.submitted_at).toLocaleString()
                         : 'N/A'}
                     </span>
                   </div>
-                  {annotation.time_spent_seconds && (
+                  {task.annotation?.time_spent && (
                     <div className="info-row">
                       <span className="info-label">Time Spent:</span>
                       <span className="info-value">
-                        {Math.round(annotation.time_spent_seconds / 60)} minutes
+                        {Math.round(task.annotation.time_spent / 60)} minutes
                       </span>
                     </div>
                   )}
                 </div>
 
-                {annotation.confidence_score && (
+                {task.annotation?.confidence_score && (
                   <div className="confidence-bar">
                     <span className="confidence-label">
-                      Confidence: {Math.round(annotation.confidence_score * 100)}%
+                      Confidence: {Math.round(task.annotation.confidence_score * 100)}%
                     </span>
                     <div className="progress-bar">
                       <div
                         className="progress-fill"
-                        style={{ width: `${annotation.confidence_score * 100}%` }}
+                        style={{ width: `${task.annotation.confidence_score * 100}%` }}
                       />
                     </div>
                   </div>

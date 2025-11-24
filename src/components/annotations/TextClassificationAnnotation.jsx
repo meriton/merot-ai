@@ -29,7 +29,10 @@ function TextClassificationAnnotation({ task, initialAnnotation, onSave, onSubmi
   };
 
   const handleSave = async (submit = false) => {
+    console.log(`=== TextClassification handleSave called (submit=${submit}) ===`);
+
     if (!selectedLabel) {
+      console.log('No label selected, showing error');
       setError('Please select a label');
       return;
     }
@@ -47,14 +50,20 @@ function TextClassificationAnnotation({ task, initialAnnotation, onSave, onSubmi
       confidence_score: confidence
     };
 
+    console.log('Annotation data to save:', annotationData);
+
     try {
       if (submit) {
+        console.log('Calling onSubmit...');
         await onSubmit(annotationData);
       } else {
+        console.log('Calling onSave...');
         await onSave(annotationData);
       }
+      console.log('Save/submit completed successfully');
     } catch (err) {
-      setError(err.response?.data?.error || `Failed to ${submit ? 'submit' : 'save'} annotation`);
+      console.error('Save/submit error:', err);
+      setError(err.response?.data?.error || err.response?.data?.errors?.join(', ') || `Failed to ${submit ? 'submit' : 'save'} annotation`);
     } finally {
       setSaving(false);
     }

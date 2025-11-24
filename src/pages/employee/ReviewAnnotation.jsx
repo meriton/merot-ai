@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { employeeAPI } from '../../services/api';
 
@@ -14,6 +14,10 @@ function ReviewAnnotation() {
   const [feedback, setFeedback] = useState('');
   const [issues, setIssues] = useState([]);
   const [submitting, setSubmitting] = useState(false);
+
+  // For bounding box canvas
+  const canvasRef = useRef(null);
+  const imageRef = useRef(null);
 
   useEffect(() => {
     fetchAnnotation();
@@ -90,6 +94,62 @@ function ReviewAnnotation() {
     setIssues(issues.filter((_, i) => i !== index));
   };
 
+  // Draw bounding boxes on canvas
+  useEffect(() => {
+    if (!annotation || annotation.annotation_type !== 'bounding_box') return;
+    if (!canvasRef.current || !imageRef.current) return;
+
+    const canvas = canvasRef.current;
+    const image = imageRef.current;
+    const ctx = canvas.getContext('2d');
+    const boxes = annotation.annotation_data?.boxes || [];
+
+    const drawBoxes = () => {
+      // Set canvas size to match image display size
+      canvas.width = image.offsetWidth;
+      canvas.height = image.offsetHeight;
+
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Calculate scale factors
+      const scaleX = canvas.width / (annotation.annotation_data.image_width || canvas.width);
+      const scaleY = canvas.height / (annotation.annotation_data.image_height || canvas.height);
+
+      // Draw each box
+      boxes.forEach((box, index) => {
+        const x = box.x * scaleX;
+        const y = box.y * scaleY;
+        const width = box.width * scaleX;
+        const height = box.height * scaleY;
+
+        // Draw box
+        ctx.strokeStyle = '#667eea';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(x, y, width, height);
+
+        // Draw label background
+        const label = `${box.label} ${Math.round(box.confidence * 100)}%`;
+        ctx.font = '14px Arial';
+        const textWidth = ctx.measureText(label).width;
+        ctx.fillStyle = '#667eea';
+        ctx.fillRect(x, y - 25, textWidth + 10, 25);
+
+        // Draw label text
+        ctx.fillStyle = 'white';
+        ctx.fillText(label, x + 5, y - 7);
+      });
+    };
+
+    // Draw boxes when image loads
+    if (image.complete) {
+      drawBoxes();
+    } else {
+      image.addEventListener('load', drawBoxes);
+      return () => image.removeEventListener('load', drawBoxes);
+    }
+  }, [annotation]);
+
   const renderAnnotationData = () => {
     if (!annotation?.annotation_data) return null;
 
@@ -100,31 +160,41 @@ function ReviewAnnotation() {
       case 'text_classification':
         return (
           <div className="annotation-preview">
-            <h3>Classification Result</h3>
+            <h3>Text Classification</h3>
             <div className="preview-content">
+              {/* Show original text from task data */}
+              {annotation.task?.data?.text && (
+                <div className="preview-text">
+                  <strong>Original Text:</strong>
+                  <p>{annotation.task.data.text}</p>
+                </div>
+              )}
               <div className="preview-row">
-                <strong>Label:</strong>
+                <strong>Classified as:</strong>
                 <span className="label-badge">{data.label}</span>
               </div>
               <div className="preview-row">
                 <strong>Confidence:</strong>
                 <span>{Math.round(data.confidence * 100)}%</span>
               </div>
-              {data.text && (
-                <div className="preview-text">
-                  <strong>Text:</strong>
-                  <p>{data.text}</p>
-                </div>
-              )}
             </div>
           </div>
         );
 
       case 'ner':
+      case 'named_entity_recognition':
         return (
           <div className="annotation-preview">
-            <h3>Named Entities ({data.entities?.length || 0})</h3>
+            <h3>Named Entity Recognition ({data.entities?.length || 0} entities)</h3>
+            {/* Show original text from task data */}
+            {annotation.task?.data?.text && (
+              <div className="preview-text">
+                <strong>Original Text:</strong>
+                <p>{annotation.task.data.text}</p>
+              </div>
+            )}
             <div className="preview-content">
+              <h4>Identified Entities:</h4>
               {data.entities?.map((entity, index) => (
                 <div key={index} className="entity-preview">
                   <span className="entity-text">"{entity.text}"</span>
@@ -139,11 +209,29 @@ function ReviewAnnotation() {
       case 'bounding_box':
         return (
           <div className="annotation-preview">
-            <h3>Bounding Boxes ({data.boxes?.length || 0})</h3>
+            <h3>Bounding Box Annotation ({data.boxes?.length || 0} boxes)</h3>
             {data.image_url && (
-              <img src={data.image_url} alt="Annotated" className="preview-image" />
+              <div className="image-container" style={{ position: 'relative', display: 'inline-block' }}>
+                <img
+                  ref={imageRef}
+                  src={data.image_url}
+                  alt="Annotated"
+                  className="preview-image"
+                  style={{ display: 'block', maxWidth: '100%', height: 'auto' }}
+                />
+                <canvas
+                  ref={canvasRef}
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    pointerEvents: 'none'
+                  }}
+                />
+              </div>
             )}
-            <div className="preview-content">
+            <div className="preview-content" style={{ marginTop: '16px' }}>
+              <h4>Detected Objects:</h4>
               {data.boxes?.map((box, index) => (
                 <div key={index} className="box-preview">
                   <span className="box-label">{box.label}</span>

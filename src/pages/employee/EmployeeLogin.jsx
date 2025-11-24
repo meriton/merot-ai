@@ -149,6 +149,8 @@ function EmployeeLogin() {
           border: 2px solid #e0e0e0;
           border-radius: 8px;
           transition: border-color 0.2s;
+          color: #1a1a1a;
+          background: white;
         }
 
         .form-group input:focus {

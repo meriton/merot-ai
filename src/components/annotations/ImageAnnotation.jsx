@@ -13,17 +13,22 @@ function ImageAnnotation({ task, initialAnnotation, onSave, onSubmit, onCancel }
 
   const canvasRef = useRef(null);
   const imageRef = useRef(null);
+  const initialLoadDone = useRef(false);
 
   const imageUrl = task?.data?.image_url || '';
   const availableLabels = task?.data?.labels || task?.project?.labels || ['person', 'car', 'object'];
   const mlSuggestions = initialAnnotation?.ml_suggestions?.boxes || [];
 
   useEffect(() => {
-    // Load existing boxes or ML suggestions
+    // Only load initial boxes once to avoid overwriting user's drawn boxes
+    if (initialLoadDone.current) return;
+
     if (initialAnnotation?.annotation_data?.boxes) {
       setBoxes(initialAnnotation.annotation_data.boxes);
+      initialLoadDone.current = true;
     } else if (mlSuggestions.length > 0) {
       setBoxes(mlSuggestions);
+      initialLoadDone.current = true;
     }
   }, [initialAnnotation, mlSuggestions]);
 
