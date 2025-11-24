@@ -158,7 +158,7 @@ function LandingPage() {
             </div>
             <div className="hero-cta">
               <button className="primary-button" onClick={() => navigate('/register')}>Start a Pilot</button>
-              <button className="secondary-button">Learn More</button>
+              <button className="secondary-button" onClick={() => navigate('/learn-more')}>Learn More</button>
             </div>
           </div>
           <div className="hero-image">

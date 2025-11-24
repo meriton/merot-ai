@@ -3,6 +3,7 @@ import LandingPage from './pages/LandingPage'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Contact from './pages/Contact'
+import LearnMore from './pages/LearnMore'
 import Dashboard from './pages/Dashboard'
 import Plans from './pages/Plans'
 import AdminDashboard from './pages/admin/AdminDashboard'
@@ -41,6 +42,7 @@ function App() {
           element={token ? <Navigate to="/dashboard" replace /> : <Register />}
         />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/learn-more" element={<LearnMore />} />
         <Route
           path="/dashboard"
           element={
