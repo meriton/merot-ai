@@ -234,7 +234,7 @@ function Contact() {
       <style>{`
         .contact-page {
           min-height: 100vh;
-          background: #f5f7fa;
+          background: linear-gradient(135deg, #0A0E14 0%, #1a1f2e 100%);
         }
 
         .contact-nav {
@@ -242,19 +242,20 @@ function Contact() {
           justify-content: space-between;
           align-items: center;
           padding: 16px 32px;
-          background: white;
-          border-bottom: 1px solid #e0e0e0;
+          background: rgba(255, 255, 255, 0.03);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .nav-logo .logo {
           height: 32px;
+          filter: brightness(0) invert(1);
         }
 
         .back-link {
           display: flex;
           align-items: center;
           gap: 8px;
-          color: #667eea;
+          color: #60a5fa;
           text-decoration: none;
           font-size: 14px;
           font-weight: 500;
@@ -262,7 +263,7 @@ function Contact() {
         }
 
         .back-link:hover {
-          color: #5568d3;
+          color: #3b82f6;
         }
 
         .contact-container {
@@ -275,7 +276,8 @@ function Contact() {
         .contact-content {
           max-width: 800px;
           width: 100%;
-          background: white;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
           border-radius: 12px;
           padding: 48px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -289,13 +291,13 @@ function Contact() {
         .contact-header h1 {
           font-size: 36px;
           font-weight: 700;
-          color: #1a1a1a;
+          color: #ffffff;
           margin-bottom: 12px;
         }
 
         .contact-header p {
           font-size: 18px;
-          color: #666;
+          color: #8892a0;
         }
 
         .contact-form {
@@ -323,25 +325,33 @@ function Contact() {
         .form-group label {
           font-size: 14px;
           font-weight: 600;
-          color: #333;
+          color: #ffffff;
         }
 
         .form-group input,
         .form-group select,
         .form-group textarea {
           padding: 12px 16px;
-          border: 2px solid #e0e0e0;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
           border-radius: 8px;
           font-size: 15px;
           font-family: inherit;
-          transition: border-color 0.2s;
+          color: #ffffff;
+          transition: all 0.2s;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+          color: #6b7280;
         }
 
         .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus {
           outline: none;
-          border-color: #667eea;
+          border-color: #60a5fa;
+          background: rgba(255, 255, 255, 0.08);
         }
 
         .form-group textarea {
@@ -369,7 +379,7 @@ function Contact() {
         }
 
         .submit-button {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
           color: white;
           border: none;
           padding: 14px 32px;
@@ -382,7 +392,7 @@ function Contact() {
 
         .submit-button:hover:not(:disabled) {
           transform: translateY(-2px);
-          box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+          box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
         }
 
         .submit-button:disabled {
