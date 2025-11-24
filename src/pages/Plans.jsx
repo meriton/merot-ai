@@ -59,9 +59,11 @@ const Plans = () => {
           <h1>Choose Your Plan</h1>
         </div>
         <div className="header-right">
-          <button onClick={() => navigate('/dashboard')} className="back-btn">
-            Back to Dashboard
-          </button>
+          {(subscription?.status === 'active' || subscription?.status === 'trialing') && (
+            <button onClick={() => navigate('/dashboard')} className="back-btn">
+              Back to Dashboard
+            </button>
+          )}
           <span className="user-name">{user?.full_name}</span>
           <button onClick={handleLogout} className="logout-btn">
             Logout
@@ -130,24 +132,6 @@ const Plans = () => {
               );
             })
           )}
-        </div>
-
-        <div className="plans-notes">
-          <h3>Add-Ons Available</h3>
-          <div className="addons-grid">
-            <div className="addon-item">
-              <span className="addon-name">Rush Delivery</span>
-              <span className="addon-price">+50%</span>
-            </div>
-            <div className="addon-item">
-              <span className="addon-name">Quality Assurance Review</span>
-              <span className="addon-price">+$0.02/annotation</span>
-            </div>
-            <div className="addon-item">
-              <span className="addon-name">Custom Taxonomy Setup</span>
-              <span className="addon-price">From $500</span>
-            </div>
-          </div>
         </div>
       </main>
 
@@ -411,46 +395,6 @@ const Plans = () => {
           cursor: not-allowed;
         }
 
-        .plans-notes {
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 12px;
-          padding: 32px;
-          text-align: center;
-        }
-
-        .plans-notes h3 {
-          color: #ffffff;
-          font-size: 18px;
-          font-weight: 600;
-          margin-bottom: 24px;
-        }
-
-        .addons-grid {
-          display: flex;
-          justify-content: center;
-          gap: 48px;
-          flex-wrap: wrap;
-        }
-
-        .addon-item {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 8px;
-        }
-
-        .addon-name {
-          color: #8892a0;
-          font-size: 14px;
-        }
-
-        .addon-price {
-          color: #3b82f6;
-          font-size: 16px;
-          font-weight: 600;
-        }
-
         @media (max-width: 1100px) {
           .plans-grid {
             grid-template-columns: repeat(2, 1fr);
@@ -479,11 +423,6 @@ const Plans = () => {
 
           .plans-grid {
             grid-template-columns: 1fr;
-          }
-
-          .addons-grid {
-            flex-direction: column;
-            gap: 24px;
           }
         }
       `}</style>
