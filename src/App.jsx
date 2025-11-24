@@ -9,6 +9,8 @@ import Plans from './pages/Plans'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminUsers from './pages/admin/AdminUsers'
 import AdminPlans from './pages/admin/AdminPlans'
+import AdminTasks from './pages/admin/AdminTasks'
+import AdminTaskDetail from './pages/admin/AdminTaskDetail'
 import ProtectedRoute from './components/ProtectedRoute'
 import AdminRoute from './components/AdminRoute'
 import useAuthStore from './stores/authStore'
@@ -82,6 +84,22 @@ function App() {
           element={
             <AdminRoute>
               <AdminPlans />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/tasks"
+          element={
+            <AdminRoute>
+              <AdminTasks />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/tasks/:taskId"
+          element={
+            <AdminRoute>
+              <AdminTaskDetail />
             </AdminRoute>
           }
         />

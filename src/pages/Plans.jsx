@@ -26,7 +26,7 @@ const Plans = () => {
 
   const handleCheckout = async (plan) => {
     if (plan.price_formatted === 'Custom') {
-      window.location.href = 'mailto:sales@merot.ai?subject=Enterprise%20Inquiry';
+      navigate('/contact');
       return;
     }
 
@@ -125,7 +125,7 @@ const Plans = () => {
                       : plan.price_formatted === 'Custom'
                       ? 'Contact Sales'
                       : plan.stripe_price_id
-                      ? 'Subscribe Now'
+                      ? 'Choose Plan'
                       : 'Coming Soon'}
                   </button>
                 </div>
