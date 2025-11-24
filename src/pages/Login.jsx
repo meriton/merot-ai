@@ -27,20 +27,29 @@ const Login = () => {
       // Check if user was trying to checkout a plan before login
       const pendingPlan = localStorage.getItem('pendingPlanCheckout');
       if (pendingPlan) {
-        localStorage.removeItem('pendingPlanCheckout');
+        console.log('Found pending plan checkout:', pendingPlan);
         try {
           const response = await subscriptionsAPI.checkout(pendingPlan);
+          console.log('Checkout response:', response.data);
+          // Only remove after successful API call
+          localStorage.removeItem('pendingPlanCheckout');
+          // Redirect to Stripe - this will navigate away from the app
           window.location.href = response.data.checkout_url;
+          return; // Don't navigate to dashboard
         } catch (error) {
           console.error('Checkout error:', error);
+          localStorage.removeItem('pendingPlanCheckout'); // Remove on error too
           alert(error.response?.data?.error || 'Failed to start checkout. Redirecting to plans page.');
           navigate('/plans');
+          return;
         }
-      } else {
-        navigate('/dashboard');
       }
+
+      // No pending plan, go to dashboard
+      navigate('/dashboard');
     } catch (err) {
       // Error is handled by the store
+      console.error('Login error:', err);
     }
   };
 

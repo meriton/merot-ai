@@ -64,9 +64,11 @@ function LandingPage() {
   const handleCheckout = async (plan) => {
     // If user is not logged in, store plan and redirect to login
     if (!token) {
-      localStorage.setItem('pendingPlanCheckout', plan.slug)
-      navigate('/register')
-      return
+      console.log('Storing pending plan checkout:', plan.slug);
+      localStorage.setItem('pendingPlanCheckout', plan.slug);
+      console.log('Stored in localStorage:', localStorage.getItem('pendingPlanCheckout'));
+      navigate('/register');
+      return;
     }
 
     // If plan is Enterprise or doesn't have stripe_price_id, redirect to contact
@@ -431,13 +433,7 @@ function LandingPage() {
                   </ul>
                   <button
                     className={`pricing-button ${plan.is_featured ? 'primary' : ''}`}
-                    onClick={() => {
-                      if (plan.slug === 'enterprise') {
-                        selectPlan(plan.name);
-                      } else {
-                        navigate('/register');
-                      }
-                    }}
+                    onClick={() => handleCheckout(plan)}
                   >
                     {plan.slug === 'enterprise'
                       ? 'Contact Sales'

@@ -34,6 +34,49 @@ function EmployeeAnalytics() {
     }
   };
 
+  const handleExport = async (type, format = 'json') => {
+    try {
+      const endDate = new Date().toISOString().split('T')[0];
+      const startDate = new Date(Date.now() - dateRange * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+
+      let response;
+      let filename;
+
+      switch(type) {
+        case 'annotations':
+          response = await employeeAPI.exportAnnotations({ start_date: startDate, end_date: endDate, format });
+          filename = `annotations_export_${startDate}_${endDate}.${format}`;
+          break;
+        case 'tasks':
+          response = await employeeAPI.exportTasks({ start_date: startDate, end_date: endDate, format });
+          filename = `tasks_export_${startDate}_${endDate}.${format}`;
+          break;
+        case 'performance':
+          response = await employeeAPI.exportPerformance({ start_date: startDate, end_date: endDate });
+          filename = `performance_report_${startDate}_${endDate}.json`;
+          break;
+        default:
+          return;
+      }
+
+      // Create blob and download
+      const blob = new Blob([typeof response.data === 'string' ? response.data : JSON.stringify(response.data, null, 2)], {
+        type: format === 'csv' ? 'text/csv' : 'application/json'
+      });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Export error:', err);
+      alert(err.response?.data?.error || 'Failed to export data');
+    }
+  };
+
   const renderTrendChart = () => {
     if (!stats?.trends || stats.trends.length === 0) return null;
 
@@ -90,15 +133,63 @@ function EmployeeAnalytics() {
           <h1>Performance Analytics</h1>
           <p>Track your performance and progress</p>
         </div>
-        <select
-          value={dateRange}
-          onChange={(e) => setDateRange(e.target.value)}
-          className="date-range-select"
-        >
-          <option value="7">Last 7 days</option>
-          <option value="30">Last 30 days</option>
-          <option value="90">Last 90 days</option>
-        </select>
+        <div className="header-actions">
+          <select
+            value={dateRange}
+            onChange={(e) => setDateRange(e.target.value)}
+            className="date-range-select"
+          >
+            <option value="7">Last 7 days</option>
+            <option value="30">Last 30 days</option>
+            <option value="90">Last 90 days</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Export Section */}
+      <div className="export-section">
+        <h3>Export Data</h3>
+        <div className="export-buttons">
+          <div className="export-group">
+            <span className="export-label">Annotations:</span>
+            <button onClick={() => handleExport('annotations', 'json')} className="export-btn">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              JSON
+            </button>
+            <button onClick={() => handleExport('annotations', 'csv')} className="export-btn">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              CSV
+            </button>
+          </div>
+          <div className="export-group">
+            <span className="export-label">Tasks:</span>
+            <button onClick={() => handleExport('tasks', 'json')} className="export-btn">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              JSON
+            </button>
+            <button onClick={() => handleExport('tasks', 'csv')} className="export-btn">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              CSV
+            </button>
+          </div>
+          <div className="export-group">
+            <span className="export-label">Performance:</span>
+            <button onClick={() => handleExport('performance')} className="export-btn">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              Report (JSON)
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Overview Cards */}
