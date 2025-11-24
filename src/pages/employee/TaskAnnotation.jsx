@@ -3,7 +3,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { employeeAPI } from '../../services/api';
 import TextClassificationAnnotation from '../../components/annotations/TextClassificationAnnotation';
 import NERAnnotation from '../../components/annotations/NERAnnotation';
+import SentimentAnnotation from '../../components/annotations/SentimentAnnotation';
 import ImageAnnotation from '../../components/annotations/ImageAnnotation';
+import PolygonAnnotation from '../../components/annotations/PolygonAnnotation';
+import KeypointAnnotation from '../../components/annotations/KeypointAnnotation';
 
 function TaskAnnotation() {
   const { taskId } = useParams();
@@ -142,10 +145,22 @@ function TaskAnnotation() {
       case 'named_entity_recognition':
         return <NERAnnotation {...componentProps} />;
 
+      case 'sentiment':
+      case 'sentiment_analysis':
+        return <SentimentAnnotation {...componentProps} />;
+
       case 'image_annotation':
       case 'image_classification':
       case 'bounding_box':
         return <ImageAnnotation {...componentProps} />;
+
+      case 'polygon':
+      case 'polygon_segmentation':
+        return <PolygonAnnotation {...componentProps} />;
+
+      case 'keypoint':
+      case 'keypoint_annotation':
+        return <KeypointAnnotation {...componentProps} />;
 
       case 'audio_transcription':
         return (
