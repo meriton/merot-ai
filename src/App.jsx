@@ -11,8 +11,17 @@ import ProtectedRoute from './components/ProtectedRoute'
 import AdminRoute from './components/AdminRoute'
 import useAuthStore from './stores/authStore'
 
+// Employee Portal
+import EmployeeLogin from './pages/employee/EmployeeLogin'
+import EmployeeDashboardLayout from './pages/employee/EmployeeDashboardLayout'
+import EmployeeDashboard from './pages/employee/EmployeeDashboard'
+import EmployeeTasks from './pages/employee/EmployeeTasks'
+import EmployeeProtectedRoute from './components/EmployeeProtectedRoute'
+import useEmployeeAuthStore from './stores/employeeAuthStore'
+
 function App() {
   const { token } = useAuthStore()
+  const { token: employeeToken } = useEmployeeAuthStore()
 
   return (
     <Router>
@@ -68,6 +77,24 @@ function App() {
             </AdminRoute>
           }
         />
+
+        {/* Employee Portal Routes */}
+        <Route
+          path="/employee/login"
+          element={employeeToken ? <Navigate to="/employee/dashboard" replace /> : <EmployeeLogin />}
+        />
+        <Route
+          path="/employee"
+          element={
+            <EmployeeProtectedRoute>
+              <EmployeeDashboardLayout />
+            </EmployeeProtectedRoute>
+          }
+        >
+          <Route index element={<Navigate to="/employee/dashboard" replace />} />
+          <Route path="dashboard" element={<EmployeeDashboard />} />
+          <Route path="tasks" element={<EmployeeTasks />} />
+        </Route>
       </Routes>
     </Router>
   )

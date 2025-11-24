@@ -72,4 +72,51 @@ export const adminAPI = {
   updatePlan: (id, data) => api.patch(`/admin/plans/${id}`, data),
 };
 
+// Employee API (separate axios instance with separate token storage)
+const employeeApiInstance = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+// Employee request interceptor (uses different token key)
+employeeApiInstance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('employee_token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// Employee response interceptor
+employeeApiInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('employee_token');
+      localStorage.removeItem('employee');
+      if (window.location.pathname.startsWith('/employee') &&
+          window.location.pathname !== '/employee/login') {
+        window.location.href = '/employee/login';
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
+export const employeeAPI = {
+  // Authentication
+  login: (credentials) => employeeApiInstance.post('/employee/auth/login', { employee: credentials }),
+  logout: () => employeeApiInstance.delete('/employee/auth/logout'),
+
+  // Tasks
+  getTasks: (params = {}) => employeeApiInstance.get('/employee/tasks', { params }),
+  getTask: (id) => employeeApiInstance.get(`/employee/tasks/${id}`),
+  startTask: (id) => employeeApiInstance.post(`/employee/tasks/${id}/start`),
+};
+
 export default api;
