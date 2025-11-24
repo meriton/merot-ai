@@ -16,6 +16,10 @@ import EmployeeLogin from './pages/employee/EmployeeLogin'
 import EmployeeDashboardLayout from './pages/employee/EmployeeDashboardLayout'
 import EmployeeDashboard from './pages/employee/EmployeeDashboard'
 import EmployeeTasks from './pages/employee/EmployeeTasks'
+import TaskAnnotation from './pages/employee/TaskAnnotation'
+import ReviewQueue from './pages/employee/ReviewQueue'
+import ReviewAnnotation from './pages/employee/ReviewAnnotation'
+import EmployeeAnalytics from './pages/employee/EmployeeAnalytics'
 import EmployeeProtectedRoute from './components/EmployeeProtectedRoute'
 import useEmployeeAuthStore from './stores/employeeAuthStore'
 
@@ -94,6 +98,10 @@ function App() {
           <Route index element={<Navigate to="/employee/dashboard" replace />} />
           <Route path="dashboard" element={<EmployeeDashboard />} />
           <Route path="tasks" element={<EmployeeTasks />} />
+          <Route path="tasks/:taskId" element={<TaskAnnotation />} />
+          <Route path="reviews" element={<ReviewQueue />} />
+          <Route path="review/:annotationId" element={<ReviewAnnotation />} />
+          <Route path="analytics" element={<EmployeeAnalytics />} />
         </Route>
       </Routes>
     </Router>

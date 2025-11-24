@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { employeeAPI } from '../../services/api';
 
 function EmployeeTasks() {
+  const navigate = useNavigate();
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -110,7 +112,12 @@ function EmployeeTasks() {
                     Due: {new Date(task.due_date).toLocaleDateString()}
                   </span>
                 )}
-                <button className="task-action-btn">View Task</button>
+                <button
+                  className="task-action-btn"
+                  onClick={() => navigate(`/employee/tasks/${task.id}`)}
+                >
+                  View Task
+                </button>
               </div>
             </div>
           ))}
