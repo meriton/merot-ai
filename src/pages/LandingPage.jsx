@@ -363,7 +363,7 @@ function LandingPage() {
                 </div>
               </div>
             </div>
-            <button className="primary-button large" onClick={() => selectPlan('Pilot')}>Request Pilot Pricing</button>
+            <button className="primary-button large" onClick={() => navigate('/register')}>Start Pilot</button>
           </div>
         </div>
       </section>
