@@ -97,7 +97,7 @@ function LandingPage() {
             <p className="scroll-banner-title">Unlock savings and accuracy for your AI data and annotations</p>
           </div>
           <button className="scroll-banner-button" onClick={() => navigate('/register')}>
-            Create Account
+            Try Our Free Pilot
           </button>
         </div>
       </div>
