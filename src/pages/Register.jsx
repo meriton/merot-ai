@@ -64,7 +64,7 @@ const Register = () => {
             <img src="/merotai-logo.png" alt="Merot AI" height="40" />
           </Link>
           <h1>Create Account</h1>
-          <p>Join Merot AI and start annotating</p>
+          <p>View Plans After Registration</p>
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
