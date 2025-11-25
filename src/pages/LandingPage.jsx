@@ -414,6 +414,12 @@ function LandingPage() {
                   <div className="pricing-price">
                     {plan.price_formatted === 'Custom' ? (
                       <span className="price-amount">Custom</span>
+                    ) : plan.price_cents === 0 ? (
+                      <>
+                        <span className="price-currency">$</span>
+                        <span className="price-amount">0</span>
+                        <span className="price-period"> / one month</span>
+                      </>
                     ) : (
                       <>
                         <span className="price-currency">$</span>
