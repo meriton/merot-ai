@@ -89,8 +89,27 @@ function TaskAnnotation() {
       console.log('Making API call to submitAnnotation...');
       await employeeAPI.submitAnnotation(taskId, annotationData);
       console.log('Submit successful!');
-      alert('Annotation submitted successfully!');
-      navigate('/employee/tasks');
+
+      // Try to fetch the next available task
+      try {
+        const tasksResponse = await employeeAPI.getTasks({ status: 'assigned', limit: 1 });
+        const nextTask = tasksResponse.data.tasks?.[0];
+
+        if (nextTask) {
+          // Navigate to the next task
+          alert('Annotation submitted! Loading next task...');
+          navigate(`/employee/tasks/${nextTask.id}`);
+        } else {
+          // No more tasks available
+          alert('Annotation submitted successfully! No more tasks available.');
+          navigate('/employee/tasks');
+        }
+      } catch (fetchError) {
+        // If fetching next task fails, just go to tasks list
+        console.error('Error fetching next task:', fetchError);
+        alert('Annotation submitted successfully!');
+        navigate('/employee/tasks');
+      }
     } catch (err) {
       console.error('Submit error:', err);
       console.error('Error response:', err.response?.data);
