@@ -7,6 +7,7 @@ function EmployeeAnalytics() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [dateRange, setDateRange] = useState('30'); // days
+  const [exporting, setExporting] = useState(false);
 
   useEffect(() => {
     fetchAnalytics();
@@ -31,6 +32,50 @@ function EmployeeAnalytics() {
       setError(err.response?.data?.error || err.message || 'Failed to load analytics');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleExport = async (type) => {
+    setExporting(true);
+    try {
+      const endDate = new Date().toISOString().split('T')[0];
+      const startDate = new Date(Date.now() - dateRange * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+
+      let response;
+      let filename;
+
+      switch (type) {
+        case 'annotations':
+          response = await employeeAPI.exportAnnotations({
+            format: 'csv',
+            start_date: startDate,
+            end_date: endDate
+          });
+          filename = `my_annotations_${startDate}_to_${endDate}.csv`;
+          break;
+        case 'performance':
+          response = await employeeAPI.exportPerformance({
+            start_date: startDate,
+            end_date: endDate
+          });
+          filename = `my_performance_${startDate}_to_${endDate}.json`;
+          break;
+        default:
+          return;
+      }
+
+      // Create download link
+      const url = window.URL.createObjectURL(new Blob([JSON.stringify(response.data)]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (err) {
+      alert('Export failed: ' + (err.response?.data?.error || err.message));
+    } finally {
+      setExporting(false);
     }
   };
 
@@ -253,6 +298,34 @@ function EmployeeAnalytics() {
           </div>
         </div>
       )}
+
+      {/* Export Section */}
+      <div className="export-section">
+        <h2>Export Your Data</h2>
+        <p>Download your performance and annotation data for the selected date range</p>
+        <div className="export-buttons">
+          <button
+            onClick={() => handleExport('annotations')}
+            disabled={exporting}
+            className="export-btn"
+          >
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            {exporting ? 'Exporting...' : 'Export Annotations (CSV)'}
+          </button>
+          <button
+            onClick={() => handleExport('performance')}
+            disabled={exporting}
+            className="export-btn"
+          >
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+            {exporting ? 'Exporting...' : 'Export Performance (JSON)'}
+          </button>
+        </div>
+      </div>
 
       <style>{`
         .employee-analytics {
@@ -642,6 +715,68 @@ function EmployeeAnalytics() {
           color: #ddd;
         }
 
+        /* Export Section */
+        .export-section {
+          background: white;
+          border-radius: 12px;
+          padding: 24px;
+          margin-top: 32px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .export-section h2 {
+          font-size: 20px;
+          font-weight: 700;
+          color: #1a1a1a;
+          margin-bottom: 8px;
+        }
+
+        .export-section p {
+          font-size: 14px;
+          color: #666;
+          margin-bottom: 20px;
+        }
+
+        .export-buttons {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 16px;
+        }
+
+        .export-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          padding: 14px 20px;
+          background: white;
+          border: 2px solid #e0e0e0;
+          border-radius: 8px;
+          font-size: 14px;
+          font-weight: 600;
+          color: #555;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .export-btn:hover:not(:disabled) {
+          border-color: #667eea;
+          color: #667eea;
+          background: #f9fafb;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+
+        .export-btn:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+
+        .export-btn svg {
+          width: 20px;
+          height: 20px;
+        }
+
         @media (max-width: 768px) {
           .analytics-header {
             flex-direction: column;
@@ -660,6 +795,10 @@ function EmployeeAnalytics() {
 
           .breakdown-count {
             text-align: left;
+          }
+
+          .export-buttons {
+            grid-template-columns: 1fr;
           }
         }
       `}</style>
