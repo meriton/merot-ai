@@ -132,6 +132,8 @@ const Plans = () => {
                       ? 'Current Plan'
                       : plan.price_formatted === 'Custom'
                       ? 'Contact Sales'
+                      : plan.slug === 'starter-pilot'
+                      ? 'Start Pilot'
                       : plan.slug === 'pilot' || (plan.price_cents === 0 && !plan.stripe_price_id)
                       ? 'Start Free Trial'
                       : plan.stripe_price_id
