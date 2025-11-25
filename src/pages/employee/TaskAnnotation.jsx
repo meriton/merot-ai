@@ -10,6 +10,7 @@ import KeypointAnnotation from '../../components/annotations/KeypointAnnotation'
 import AudioAnnotation from './AudioAnnotation';
 import VideoAnnotation from './VideoAnnotation';
 import TaskDiscussion from '../../components/TaskDiscussion';
+import GuidelinesViewer from '../../components/GuidelinesViewer';
 
 function TaskAnnotation() {
   const { taskId } = useParams();
@@ -247,23 +248,8 @@ function TaskAnnotation() {
       </div>
 
       {/* Guidelines */}
-      {task?.project?.guidelines && Object.keys(task.project.guidelines).length > 0 && (
-        <div className="guidelines-section">
-          <h3>Guidelines</h3>
-          <div className="guidelines-content">
-            {typeof task.project.guidelines === 'string' ? (
-              <p>{task.project.guidelines}</p>
-            ) : (
-              <ul>
-                {Object.entries(task.project.guidelines).map(([key, value]) => (
-                  <li key={key}>
-                    <strong>{key}:</strong> {value}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        </div>
+      {task?.project && (
+        <GuidelinesViewer project={task.project} taskType={task.task_type} />
       )}
 
       {/* Annotation Component */}
@@ -476,48 +462,6 @@ function TaskAnnotation() {
         .unsubmit-btn:disabled {
           opacity: 0.5;
           cursor: not-allowed;
-        }
-
-        .guidelines-section {
-          background: #fffbf0;
-          border: 2px solid #ffd54f;
-          border-radius: 12px;
-          padding: 24px;
-          margin-bottom: 24px;
-        }
-
-        .guidelines-section h3 {
-          font-size: 18px;
-          font-weight: 700;
-          color: #f57c00;
-          margin-bottom: 12px;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
-
-        .guidelines-content {
-          font-size: 15px;
-          line-height: 1.6;
-          color: #555;
-        }
-
-        .guidelines-content ul {
-          list-style: none;
-          padding: 0;
-        }
-
-        .guidelines-content li {
-          padding: 8px 0;
-          border-bottom: 1px solid #ffe082;
-        }
-
-        .guidelines-content li:last-child {
-          border-bottom: none;
-        }
-
-        .guidelines-content strong {
-          color: #f57c00;
         }
 
         .annotation-container {

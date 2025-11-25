@@ -25,6 +25,8 @@ import ReviewQueue from './pages/employee/ReviewQueue'
 import ReviewAnnotation from './pages/employee/ReviewAnnotation'
 import RevisionInterface from './pages/employee/RevisionInterface'
 import EmployeeAnalytics from './pages/employee/EmployeeAnalytics'
+import EmployeeOnboarding from './pages/employee/EmployeeOnboarding'
+import HelpCenter from './pages/employee/HelpCenter'
 import EmployeeProtectedRoute from './components/EmployeeProtectedRoute'
 import useEmployeeAuthStore from './stores/employeeAuthStore'
 
@@ -111,6 +113,14 @@ function App() {
           element={employeeToken ? <Navigate to="/employee/dashboard" replace /> : <EmployeeLogin />}
         />
         <Route
+          path="/employee/onboarding"
+          element={
+            <EmployeeProtectedRoute>
+              <EmployeeOnboarding />
+            </EmployeeProtectedRoute>
+          }
+        />
+        <Route
           path="/employee"
           element={
             <EmployeeProtectedRoute>
@@ -126,6 +136,7 @@ function App() {
           <Route path="review/:annotationId" element={<ReviewAnnotation />} />
           <Route path="revisions" element={<RevisionInterface />} />
           <Route path="analytics" element={<EmployeeAnalytics />} />
+          <Route path="help" element={<HelpCenter />} />
         </Route>
       </Routes>
     </Router>
