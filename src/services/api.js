@@ -173,6 +173,10 @@ export const employeeAPI = {
     employeeApiInstance.post(`/employee/reviews/annotation/${id}/reject`, reviewData),
   requestRevision: (id, reviewData) =>
     employeeApiInstance.post(`/employee/reviews/annotation/${id}/request_revision`, reviewData),
+  bulkApproveAnnotations: (annotationIds, reviewData) =>
+    employeeApiInstance.post('/employee/reviews/bulk_approve', { annotation_ids: annotationIds, ...reviewData }),
+  bulkRejectAnnotations: (annotationIds, reviewData) =>
+    employeeApiInstance.post('/employee/reviews/bulk_reject', { annotation_ids: annotationIds, ...reviewData }),
 
   // Images
   uploadImage: (taskId, file, metadata = {}) => {

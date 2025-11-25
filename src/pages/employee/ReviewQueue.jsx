@@ -17,6 +17,8 @@ function ReviewQueue() {
   });
   const [projects, setProjects] = useState([]);
   const [annotators, setAnnotators] = useState([]);
+  const [selectedAnnotations, setSelectedAnnotations] = useState([]);
+  const [bulkProcessing, setBulkProcessing] = useState(false);
 
   useEffect(() => {
     fetchQueue();
@@ -58,6 +60,74 @@ function ReviewQueue() {
 
   const handleReviewClick = (task) => {
     navigate(`/employee/review/${task.annotation.id}`);
+  };
+
+  const handleSelectAnnotation = (annotationId) => {
+    setSelectedAnnotations(prev =>
+      prev.includes(annotationId)
+        ? prev.filter(id => id !== annotationId)
+        : [...prev, annotationId]
+    );
+  };
+
+  const handleSelectAll = () => {
+    if (selectedAnnotations.length === tasks.length) {
+      setSelectedAnnotations([]);
+    } else {
+      setSelectedAnnotations(tasks.map(t => t.annotation.id));
+    }
+  };
+
+  const handleBulkApprove = async () => {
+    if (selectedAnnotations.length === 0) return;
+
+    const qualityScore = prompt('Enter quality score (1-10):', '8');
+    if (!qualityScore) return;
+
+    if (!window.confirm(`Approve ${selectedAnnotations.length} annotations with quality score ${qualityScore}?`)) {
+      return;
+    }
+
+    setBulkProcessing(true);
+    try {
+      const response = await employeeAPI.bulkApproveAnnotations(selectedAnnotations, {
+        quality_score: parseInt(qualityScore)
+      });
+
+      alert(response.data.message);
+      setSelectedAnnotations([]);
+      fetchQueue(); // Refresh the queue
+    } catch (err) {
+      alert('Bulk approval failed: ' + (err.response?.data?.error || err.message));
+    } finally {
+      setBulkProcessing(false);
+    }
+  };
+
+  const handleBulkReject = async () => {
+    if (selectedAnnotations.length === 0) return;
+
+    const feedback = prompt(`Enter rejection feedback for ${selectedAnnotations.length} annotations:`);
+    if (!feedback) return;
+
+    if (!window.confirm(`Reject ${selectedAnnotations.length} annotations?`)) {
+      return;
+    }
+
+    setBulkProcessing(true);
+    try {
+      const response = await employeeAPI.bulkRejectAnnotations(selectedAnnotations, {
+        feedback: feedback
+      });
+
+      alert(response.data.message);
+      setSelectedAnnotations([]);
+      fetchQueue(); // Refresh the queue
+    } catch (err) {
+      alert('Bulk rejection failed: ' + (err.response?.data?.error || err.message));
+    } finally {
+      setBulkProcessing(false);
+    }
   };
 
   const getStatusColor = (status) => {
@@ -227,16 +297,86 @@ function ReviewQueue() {
           <span>Tasks will appear here when submitted for review</span>
         </div>
       ) : (
-        <div className="queue-list">
-          {tasks.map(task => (
-            <div
-              key={task.id}
-              className="annotation-card"
-              onClick={() => handleReviewClick(task)}
-            >
-              <div className="card-header">
-                <div className="header-left">
-                  <span className="annotation-id">Task #{task.id}</span>
+        <>
+          {/* Bulk Actions Toolbar */}
+          {selectedAnnotations.length > 0 && (
+            <div className="bulk-actions-toolbar">
+              <div className="toolbar-left">
+                <span className="selected-count">
+                  {selectedAnnotations.length} selected
+                </span>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedAnnotations([]);
+                  }}
+                  className="clear-selection-btn"
+                >
+                  Clear
+                </button>
+              </div>
+              <div className="toolbar-actions">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleBulkApprove();
+                  }}
+                  disabled={bulkProcessing}
+                  className="bulk-btn approve"
+                >
+                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  {bulkProcessing ? 'Processing...' : 'Approve All'}
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleBulkReject();
+                  }}
+                  disabled={bulkProcessing}
+                  className="bulk-btn reject"
+                >
+                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                  {bulkProcessing ? 'Processing...' : 'Reject All'}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Select All Row */}
+          <div className="select-all-row">
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
+                checked={selectedAnnotations.length === tasks.length && tasks.length > 0}
+                onChange={handleSelectAll}
+                className="checkbox-input"
+              />
+              <span>Select All ({tasks.length})</span>
+            </label>
+          </div>
+
+          <div className="queue-list">
+            {tasks.map(task => (
+              <div
+                key={task.id}
+                className="annotation-card"
+              >
+                <div className="card-checkbox" onClick={(e) => e.stopPropagation()}>
+                  <input
+                    type="checkbox"
+                    checked={selectedAnnotations.includes(task.annotation.id)}
+                    onChange={() => handleSelectAnnotation(task.annotation.id)}
+                    className="checkbox-input"
+                  />
+                </div>
+                <div className="card-content" onClick={() => handleReviewClick(task)}>
+                  <div className="card-header">
+                    <div className="header-left">
+                      <span className="annotation-id">Task #{task.id}</span>
                   <span
                     className="annotation-status"
                     style={{ background: getStatusColor('pending') }}
@@ -303,9 +443,11 @@ function ReviewQueue() {
                   </svg>
                 </button>
               </div>
-            </div>
-          ))}
-        </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
       )}
 
       <style>{`
@@ -493,23 +635,139 @@ function ReviewQueue() {
           color: #666;
         }
 
+        /* Bulk Actions Toolbar */
+        .bulk-actions-toolbar {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          border-radius: 12px;
+          padding: 16px 24px;
+          margin-bottom: 16px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          box-shadow: 0 4px 12px rgba(102, 126, 234, 0.25);
+        }
+
+        .toolbar-left {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+        }
+
+        .selected-count {
+          color: white;
+          font-size: 16px;
+          font-weight: 600;
+        }
+
+        .clear-selection-btn {
+          background: rgba(255, 255, 255, 0.2);
+          border: 1px solid rgba(255, 255, 255, 0.3);
+          color: white;
+          padding: 6px 14px;
+          border-radius: 6px;
+          font-size: 13px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .clear-selection-btn:hover {
+          background: rgba(255, 255, 255, 0.3);
+        }
+
+        .toolbar-actions {
+          display: flex;
+          gap: 12px;
+        }
+
+        .bulk-btn {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 10px 18px;
+          border: none;
+          border-radius: 8px;
+          font-size: 14px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .bulk-btn:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+
+        .bulk-btn svg {
+          width: 18px;
+          height: 18px;
+        }
+
+        .bulk-btn.approve {
+          background: #10b981;
+          color: white;
+        }
+
+        .bulk-btn.approve:hover:not(:disabled) {
+          background: #059669;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .bulk-btn.reject {
+          background: #ef4444;
+          color: white;
+        }
+
+        .bulk-btn.reject:hover:not(:disabled) {
+          background: #dc2626;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        /* Select All Row */
+        .select-all-row {
+          background: #f9fafb;
+          border-radius: 8px;
+          padding: 12px 20px;
+          margin-bottom: 16px;
+          border: 1px solid #e5e7eb;
+        }
+
+        .checkbox-label {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          cursor: pointer;
+          font-size: 14px;
+          font-weight: 500;
+          color: #374151;
+        }
+
+        .checkbox-label span {
+          user-select: none;
+        }
+
         .queue-list {
           display: grid;
           gap: 16px;
         }
 
-        .annotation-card {
-          background: white;
-          border-radius: 12px;
-          padding: 20px;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-          cursor: pointer;
-          transition: all 0.2s;
+        .card-checkbox {
+          display: flex;
+          align-items: flex-start;
+          padding-top: 4px;
         }
 
-        .annotation-card:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        .checkbox-input {
+          width: 18px;
+          height: 18px;
+          cursor: pointer;
+        }
+
+        .card-content {
+          flex: 1;
+          cursor: pointer;
         }
 
         .card-header {
