@@ -102,6 +102,11 @@ const Plans = () => {
                   <div className="plan-price">
                     {plan.price_formatted === 'Custom' ? (
                       <span className="price-amount">Custom</span>
+                    ) : plan.price_cents === 0 ? (
+                      <>
+                        <span className="price-amount">$0</span>
+                        <span className="price-period"> / One Month</span>
+                      </>
                     ) : (
                       <>
                         <span className="price-amount">{plan.price_formatted.split('/')[0]}</span>
