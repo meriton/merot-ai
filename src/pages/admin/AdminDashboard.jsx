@@ -1,33 +1,22 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { adminAPI } from '../../services/api';
-import { employeeAPI } from '../../services/api';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState(null);
-  const [teamAnalytics, setTeamAnalytics] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [dateRange, setDateRange] = useState('30'); // days
   const [exporting, setExporting] = useState(false);
 
   useEffect(() => {
     fetchAllData();
-  }, [dateRange]);
+  }, []);
 
   const fetchAllData = async () => {
     setLoading(true);
     try {
-      const endDate = new Date().toISOString().split('T')[0];
-      const startDate = new Date(Date.now() - dateRange * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
-
-      const [statsResponse, teamResponse] = await Promise.all([
-        adminAPI.getStats(),
-        employeeAPI.getTeamAnalytics({ start_date: startDate, end_date: endDate })
-      ]);
-
+      const statsResponse = await adminAPI.getStats();
       setStats(statsResponse.data.stats);
-      setTeamAnalytics(teamResponse.data);
       setError(null);
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to load dashboard');
@@ -43,6 +32,7 @@ const AdminDashboard = () => {
     }).format(cents / 100);
   };
 
+  /* Disabled - requires employee auth
   const handleExport = async (type) => {
     setExporting(true);
     try {
@@ -124,7 +114,7 @@ const AdminDashboard = () => {
         </div>
       </div>
     );
-  };
+  }; */
 
   if (loading) {
     return (
@@ -246,7 +236,7 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* Divider */}
+        {/* Divider - Disabled (team analytics require employee auth)
         <div className="section-divider">
           <h2>Annotation Platform Analytics</h2>
           <select
@@ -260,7 +250,7 @@ const AdminDashboard = () => {
           </select>
         </div>
 
-        {/* Team Performance Stats */}
+        {/* Team Performance Stats - Disabled (requires employee auth)
         {teamAnalytics && (
           <>
             <div className="stats-grid">
@@ -445,7 +435,7 @@ const AdminDashboard = () => {
               </div>
             </div>
           </>
-        )}
+        )} */}
 
         {/* Back to Dashboard Link */}
         <div className="back-link">
