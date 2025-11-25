@@ -1,5 +1,6 @@
 import { Outlet, useNavigate, NavLink } from 'react-router-dom';
 import useEmployeeAuthStore from '../../stores/employeeAuthStore';
+import NotificationCenter from '../../components/NotificationCenter';
 
 function EmployeeDashboardLayout() {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ function EmployeeDashboardLayout() {
             <span className="employee-name">{employee?.full_name}</span>
             <span className="employee-role">{employee?.role}</span>
           </div>
+          <NotificationCenter />
           <button onClick={handleLogout} className="employee-logout-btn">
             Logout
           </button>

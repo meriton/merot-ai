@@ -221,6 +221,24 @@ export const employeeAPI = {
   exportAnnotations: (params = {}) => employeeApiInstance.get('/employee/exports/annotations', { params }),
   exportTasks: (params = {}) => employeeApiInstance.get('/employee/exports/tasks', { params }),
   exportPerformance: (params = {}) => employeeApiInstance.get('/employee/exports/performance', { params }),
+
+  // Notifications
+  getNotifications: (params = {}) => employeeApiInstance.get('/employee/notifications', { params }),
+  getUnreadNotificationCount: () => employeeApiInstance.get('/employee/notifications/unread_count'),
+  markNotificationAsRead: (id) => employeeApiInstance.post(`/employee/notifications/${id}/mark_as_read`),
+  markNotificationAsUnread: (id) => employeeApiInstance.post(`/employee/notifications/${id}/mark_as_unread`),
+  markAllNotificationsAsRead: () => employeeApiInstance.post('/employee/notifications/mark_all_as_read'),
+  deleteNotification: (id) => employeeApiInstance.delete(`/employee/notifications/${id}`),
+
+  // Task Comments
+  getTaskComments: (taskId) => employeeApiInstance.get(`/employee/tasks/${taskId}/comments`),
+  createTaskComment: (taskId, commentData) =>
+    employeeApiInstance.post(`/employee/tasks/${taskId}/comments`, { comment: commentData }),
+  updateTaskComment: (taskId, commentId, commentData) =>
+    employeeApiInstance.patch(`/employee/tasks/${taskId}/comments/${commentId}`, { comment: commentData }),
+  deleteTaskComment: (taskId, commentId) =>
+    employeeApiInstance.delete(`/employee/tasks/${taskId}/comments/${commentId}`),
+  getTeamMembers: (taskId) => employeeApiInstance.get(`/employee/tasks/${taskId}/team_members`),
 };
 
 export default api;

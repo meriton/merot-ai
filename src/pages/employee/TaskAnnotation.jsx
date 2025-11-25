@@ -9,6 +9,7 @@ import PolygonAnnotation from '../../components/annotations/PolygonAnnotation';
 import KeypointAnnotation from '../../components/annotations/KeypointAnnotation';
 import AudioAnnotation from './AudioAnnotation';
 import VideoAnnotation from './VideoAnnotation';
+import TaskDiscussion from '../../components/TaskDiscussion';
 
 function TaskAnnotation() {
   const { taskId } = useParams();
@@ -270,6 +271,11 @@ function TaskAnnotation() {
         {renderAnnotationComponent()}
       </div>
 
+      {/* Task Discussion */}
+      <div className="discussion-container">
+        <TaskDiscussion taskId={taskId} />
+      </div>
+
       <style>{`
         .task-annotation-page {
           max-width: 1400px;
@@ -518,6 +524,12 @@ function TaskAnnotation() {
           background: #f5f7fa;
           border-radius: 12px;
           padding: 32px;
+          margin-bottom: 24px;
+        }
+
+        .discussion-container {
+          max-width: 1000px;
+          margin: 0 auto;
         }
 
         .annotation-placeholder {
