@@ -33,7 +33,15 @@ const Plans = () => {
     try {
       setCheckoutLoading(plan.id);
       const response = await subscriptionsAPI.checkout(plan.slug);
-      window.location.href = response.data.checkout_url;
+
+      // For Pilot plan (free trial), activate directly without Stripe
+      if (plan.slug === 'pilot' || (plan.price_cents === 0 && !plan.stripe_price_id)) {
+        alert(response.data.message || 'Pilot plan activated successfully!');
+        navigate('/dashboard');
+      } else {
+        // For paid plans, redirect to Stripe checkout
+        window.location.href = response.data.checkout_url;
+      }
     } catch (error) {
       console.error('Checkout error:', error);
       alert(error.response?.data?.error || 'Failed to start checkout');
@@ -124,6 +132,8 @@ const Plans = () => {
                       ? 'Current Plan'
                       : plan.price_formatted === 'Custom'
                       ? 'Contact Sales'
+                      : plan.slug === 'pilot' || (plan.price_cents === 0 && !plan.stripe_price_id)
+                      ? 'Start Free Trial'
                       : plan.stripe_price_id
                       ? 'Choose Plan'
                       : 'Coming Soon'}
