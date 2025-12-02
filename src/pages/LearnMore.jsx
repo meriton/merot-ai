@@ -78,7 +78,7 @@ function LearnMore() {
               Start a Pilot
             </Link>
             <Link to="/register" className="secondary-btn">
-              Sign Up
+              Create Account
             </Link>
           </div>
         </div>

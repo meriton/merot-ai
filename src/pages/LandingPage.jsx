@@ -116,7 +116,7 @@ function LandingPage() {
             ) : (
               <div className="nav-auth">
                 <Link to="/login" className="nav-login">Log In</Link>
-                <Link to="/register" className="nav-signup">Sign Up</Link>
+                <Link to="/register" className="nav-signup">Create Account</Link>
               </div>
             )}
           </div>
@@ -404,7 +404,7 @@ function LandingPage() {
             {plansLoading ? (
               <div className="pricing-loading">Loading plans...</div>
             ) : (
-              plans.map((plan) => (
+              plans.filter((plan) => plan.slug !== 'starter-pilot').map((plan) => (
                 <div
                   key={plan.id}
                   className={`pricing-card ${plan.is_featured ? 'featured' : ''}`}
