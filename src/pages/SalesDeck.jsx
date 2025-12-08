@@ -151,19 +151,31 @@ function SalesDeck() {
 
       {/* Slide 1: Title Slide */}
       <section className="slide title-slide">
-        <div className="slide-content">
-          <div className="badge">AI Data Annotation Platform</div>
-          <h1>Enterprise-Grade Quality<br/>Startup-Friendly Pricing</h1>
-          <p className="subtitle">
-            99% verified accuracy with 48-72hr turnaround, powered by dedicated teams in Southeast Europe
-          </p>
-          <div className="stats-grid">
-            {stats.map((stat, idx) => (
-              <div key={idx} className="stat-card">
-                <div className="stat-value">{stat.value}</div>
-                <div className="stat-label">{stat.label}</div>
-              </div>
-            ))}
+        <div className="title-slide-container">
+          <div className="title-slide-left">
+            <div className="badge">AI Data Annotation Platform</div>
+            <h1>Enterprise-Grade Quality<br/>Startup-Friendly Pricing</h1>
+            <p className="subtitle">
+              Professional annotation teams delivering 99% verified accuracy with full transparency and audit trails
+            </p>
+            <div className="title-cta">
+              <button onClick={() => navigate('/register')} className="hero-primary-btn">
+                Start Free Pilot
+              </button>
+              <button onClick={() => navigate('/contact')} className="hero-secondary-btn">
+                Schedule Demo
+              </button>
+            </div>
+          </div>
+          <div className="title-slide-right">
+            <div className="stats-grid-vertical">
+              {stats.map((stat, idx) => (
+                <div key={idx} className="stat-card-vertical">
+                  <div className="stat-value">{stat.value}</div>
+                  <div className="stat-label">{stat.label}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -446,61 +458,164 @@ function SalesDeck() {
 
         /* Title Slide */
         .title-slide {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
           color: white;
-          text-align: center;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .title-slide::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: radial-gradient(circle at 80% 20%, rgba(102, 126, 234, 0.15) 0%, transparent 50%);
+          pointer-events: none;
+        }
+
+        .title-slide-container {
+          display: grid;
+          grid-template-columns: 1.2fr 0.8fr;
+          gap: 4rem;
+          align-items: center;
+          position: relative;
+          z-index: 1;
+        }
+
+        .title-slide-left {
+          text-align: left;
         }
 
         .badge {
           display: inline-block;
-          background: rgba(255, 255, 255, 0.2);
-          padding: 0.5rem 1rem;
+          background: rgba(102, 126, 234, 0.2);
+          padding: 0.5rem 1.25rem;
           border-radius: 50px;
-          font-size: 0.9rem;
+          font-size: 0.85rem;
           font-weight: 600;
           margin-bottom: 1.5rem;
-          border: 1px solid rgba(255, 255, 255, 0.3);
+          border: 1px solid rgba(102, 126, 234, 0.4);
+          letter-spacing: 0.5px;
         }
 
         .title-slide h1 {
           font-size: 3.5rem;
           font-weight: 800;
-          margin-bottom: 1rem;
-          line-height: 1.2;
+          margin-bottom: 1.5rem;
+          line-height: 1.15;
+          background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
         }
 
         .subtitle {
-          font-size: 1.25rem;
-          opacity: 0.95;
-          max-width: 800px;
-          margin: 0 auto 3rem;
-          line-height: 1.6;
+          font-size: 1.2rem;
+          opacity: 0.9;
+          line-height: 1.7;
+          margin-bottom: 2.5rem;
+          color: rgba(255, 255, 255, 0.85);
         }
 
-        .stats-grid {
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 2rem;
-          margin-top: 4rem;
+        .title-cta {
+          display: flex;
+          gap: 1rem;
+          margin-top: 2rem;
         }
 
-        .stat-card {
+        .hero-primary-btn {
+          background: white;
+          color: #667eea;
+          border: none;
+          padding: 1rem 2rem;
+          font-size: 1rem;
+          font-weight: 600;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: all 0.3s;
+        }
+
+        .hero-primary-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+        }
+
+        .hero-secondary-btn {
+          background: transparent;
+          color: white;
+          border: 2px solid rgba(255, 255, 255, 0.5);
+          padding: 1rem 2rem;
+          font-size: 1rem;
+          font-weight: 600;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: all 0.3s;
+        }
+
+        .hero-secondary-btn:hover {
           background: rgba(255, 255, 255, 0.1);
-          backdrop-filter: blur(10px);
-          padding: 2rem;
-          border-radius: 12px;
-          border: 1px solid rgba(255, 255, 255, 0.2);
+          border-color: white;
+          transform: translateY(-2px);
         }
 
-        .stat-value {
+        .title-slide-right {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .stats-grid-vertical {
+          display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
+          width: 100%;
+        }
+
+        .stat-card-vertical {
+          background: rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(10px);
+          padding: 1.75rem 2rem;
+          border-radius: 12px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          display: flex;
+          align-items: center;
+          gap: 1.5rem;
+          transition: all 0.3s;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .stat-card-vertical::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          width: 4px;
+          background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .stat-card-vertical:hover {
+          background: rgba(255, 255, 255, 0.1);
+          transform: translateX(8px);
+        }
+
+        .stat-card-vertical .stat-value {
           font-size: 2.5rem;
           font-weight: 800;
-          margin-bottom: 0.5rem;
+          min-width: 120px;
+          background: linear-gradient(135deg, #ffffff 0%, #a5b4fc 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
         }
 
-        .stat-label {
-          font-size: 0.9rem;
+        .stat-card-vertical .stat-label {
+          font-size: 0.95rem;
           opacity: 0.9;
+          line-height: 1.4;
         }
 
         /* Problem Slide */
@@ -999,7 +1114,24 @@ function SalesDeck() {
 
         /* Responsive */
         @media (max-width: 1024px) {
-          .stats-grid,
+          .title-slide-container {
+            grid-template-columns: 1fr;
+            gap: 3rem;
+          }
+
+          .title-slide-left {
+            text-align: center;
+          }
+
+          .title-cta {
+            justify-content: center;
+          }
+
+          .stats-grid-vertical {
+            max-width: 500px;
+            margin: 0 auto;
+          }
+
           .problem-grid,
           .advantages-grid,
           .use-cases-grid,
@@ -1049,6 +1181,25 @@ function SalesDeck() {
 
           .subtitle {
             font-size: 1rem;
+          }
+
+          .title-cta {
+            flex-direction: column;
+            width: 100%;
+          }
+
+          .hero-primary-btn,
+          .hero-secondary-btn {
+            width: 100%;
+          }
+
+          .stat-card-vertical {
+            padding: 1.5rem;
+          }
+
+          .stat-card-vertical .stat-value {
+            font-size: 2rem;
+            min-width: 100px;
           }
 
           .cta-slide h2 {
