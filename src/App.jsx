@@ -4,6 +4,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Contact from './pages/Contact'
 import LearnMore from './pages/LearnMore'
+import SalesDeck from './pages/SalesDeck'
 import Dashboard from './pages/Dashboard'
 import Plans from './pages/Plans'
 import AdminDashboard from './pages/admin/AdminDashboard'
@@ -48,6 +49,7 @@ function App() {
         />
         <Route path="/contact" element={<Contact />} />
         <Route path="/learn-more" element={<LearnMore />} />
+        <Route path="/deck" element={<SalesDeck />} />
         <Route
           path="/dashboard"
           element={
