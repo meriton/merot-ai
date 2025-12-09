@@ -1296,7 +1296,7 @@ section {
   height: 50px;
   width: auto;
   margin-bottom: 1.25rem;
-  filter: brightness(1.1);
+  filter: brightness(0) invert(1);
 }
 
 .footer-bottom {
